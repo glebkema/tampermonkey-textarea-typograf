@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Textarea Typograf
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
-// @version      0.2
+// @version      0.2.1
 // @description  Replaces hyphens and quotation marks. Works only in the <textarea>. If you select a part of the text, only that part will be processed.
 // @author       Gleb Kemarsky
 // @grant        none
@@ -50,7 +50,7 @@
 
     function replace_words(text, find, replace) {
         // \b doesn't work for russian words
-        var regex = new RegExp('(?=[^А-Яа-яЁё]|^)(' + find + ')(?=[^а-яё]|$)', 'g');
+        var regex = new RegExp('(?<=[^А-Яа-яЁё]|^)(' + find + ')(?=[^а-яё]|$)', 'g');
         return text.replace(regex, replace);
     }
 })();
