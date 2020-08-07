@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Textarea Typograf
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
-// @version      0.2.1
+// @version      0.3
 // @description  Replaces hyphens and quotation marks. Works only in the <textarea>. If you select a part of the text, only that part will be processed.
 // @author       Gleb Kemarsky
 // @grant        none
@@ -27,6 +27,7 @@
     }
 
     // console.log(typograf('Еще она - не очень еще "еще" любила (Еще и еще). Еще вот еще, еще. И еще'));
+    // console.log(typograf('Нее ее. Длиннее еен нее.'));
 
     function typograf(text) {
         if (text) {
@@ -39,18 +40,31 @@
             text = text.replace(/([\(\s])"/gi, '$1«');
             text = text.replace(/"([.,;\s\)])/gi, '»$1');
 
-            // words
-            text = replace_words(text, 'еще', 'ещё');
-            text = replace_words(text, 'Еще', 'Ещё');
-            text = replace_words(text, 'ее', 'её');
-            text = replace_words(text, 'Ее', 'Её');
+            // words with a capital letter and yo
+            text = checkWords(text, 'Ещё,Её,Моё,Неё,Твоё');
         }
         return text;
     }
 
-    function replace_words(text, find, replace) {
-        // \b doesn't work for russian words
-        var regex = new RegExp('(?<=[^А-Яа-яЁё]|^)(' + find + ')(?=[^а-яё]|$)', 'g');
-        return text.replace(regex, replace);
+    function checkWords(text, words) {
+        if ('string' === typeof words) {
+            words = words.split(',');
+        }
+        for (var i = 0; i < words.length; i++) {
+            let word = words[i].trim();
+            let search = word.replace('ё', 'е').replace('Ё', 'Е');
+            text = replaceWords(text, search, word);
+        }
+        return text;
+    }
+
+    function replaceWords(text, word, replace) {
+        // NB: \b doesn't work for russian words
+        // 1) word starts with a capital letter
+        var regex = new RegExp('(' + word + ')(?=[^а-яё]|$)', 'g');
+        text = text.replace(regex, replace);
+        // 2) word in lowercase
+        regex = new RegExp('(?<=[^А-Яа-яЁё]|^)(' + word.toLowerCase() + ')(?=[^а-яё]|$)', 'g');
+        return text.replace(regex, replace.toLowerCase());
     }
 })();
