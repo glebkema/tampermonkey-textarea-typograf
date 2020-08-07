@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Textarea Typograf
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
-// @version      0.3
+// @version      0.3.1
 // @description  Replaces hyphens and quotation marks. Works only in the <textarea>. If you select a part of the text, only that part will be processed.
 // @author       Gleb Kemarsky
 // @grant        none
@@ -41,7 +41,11 @@
             text = text.replace(/"([.,;\s\)])/gi, '»$1');
 
             // words with a capital letter and yo
-            text = checkWords(text, 'Ещё,Её,Моё,Неё,Твоё');
+            text = checkWords(text, 'Ещё,Её,Моё,Неё,Своё,Твоё');
+            text = checkWords(text, 'Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
+            text = checkWords(text, 'Василёк,Мотылёк,Огонёк,Пенёк,Ручеёк');
+            text = checkWords(text, 'Затёк,Натёк,Потёк');
+            text = checkWords(text, 'Грёза,Грёзы,Слёзы');
         }
         return text;
     }
