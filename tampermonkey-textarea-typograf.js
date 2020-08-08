@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Textarea Typograf
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
-// @version      0.3.1
+// @version      0.3.2
 // @description  Replaces hyphens and quotation marks. Works only in the <textarea>. If you select a part of the text, only that part will be processed.
 // @author       Gleb Kemarsky
 // @grant        none
@@ -56,19 +56,21 @@
         }
         for (var i = 0; i < words.length; i++) {
             let word = words[i].trim();
-            let search = word.replace('ё', 'е').replace('Ё', 'Е');
-            text = replaceWords(text, search, word);
+            if (word) {
+                let find = word.replace('ё', 'е').replace('Ё', 'Е');
+                text = replaceWords(text, find, word);
+            }
         }
         return text;
     }
 
-    function replaceWords(text, word, replace) {
+    function replaceWords(text, find, replace) {
         // NB: \b doesn't work for russian words
         // 1) word starts with a capital letter
-        var regex = new RegExp('(' + word + ')(?=[^а-яё]|$)', 'g');
+        var regex = new RegExp('(' + find + ')(?=[^а-яё]|$)', 'g');
         text = text.replace(regex, replace);
         // 2) word in lowercase
-        regex = new RegExp('(?<=[^А-Яа-яЁё]|^)(' + word.toLowerCase() + ')(?=[^а-яё]|$)', 'g');
+        regex = new RegExp('(?<=[^А-Яа-яЁё]|^)(' + find.toLowerCase() + ')(?=[^а-яё]|$)', 'g');
         return text.replace(regex, replace.toLowerCase());
     }
 })();
