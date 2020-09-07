@@ -1,12 +1,18 @@
 // ==UserScript==
 // @name         Textarea Typograf
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
-// @version      0.3.2
 // @description  Replaces hyphens and quotation marks. Works only in the <textarea>. If you select a part of the text, only that part will be processed.
-// @author       Gleb Kemarsky
+// @author       glebkema
+// @copyright    2020, glebkema (https://github.com/glebkema)
+// @license      MIT
+// @version      0.3.3
 // @grant        none
 // @run-at       context-menu
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author glebkema
+// ==/OpenUserJS==
 
 (function() {
     'use strict';
