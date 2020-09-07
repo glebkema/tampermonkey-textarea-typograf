@@ -5,7 +5,9 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.3.3
+// @version      0.3.4
+// @match        http://*/*
+// @match        https://*/*
 // @grant        none
 // @run-at       context-menu
 // ==/UserScript==
