@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.02
+// @version      0.4.03
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -57,12 +57,8 @@ class Typograf {
     }
 
     improveQuotes(text) {
-        // TODO. regex with (?<=)
-        // TODO. ??? is /i needed
-        text = text.replace(/^"/g, '«');
-        text = text.replace(/"$/g, '»');
-        text = text.replace(/([\(\s])"/g, '$1«');
-        text = text.replace(/"([.,;:\!\?\s\)])/g, '»$1');
+        text = text.replace(/(?<=^|[\(\s])"/g, '«');
+        text = text.replace(/"(?=$|[.,;:\!\?\s\)])/g, '»');
         return text;
     }
 

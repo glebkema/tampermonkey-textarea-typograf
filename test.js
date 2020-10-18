@@ -26,17 +26,17 @@ describe('class Typograf', function() {
         let marks = ['.', ',', ';', '!', '?'];
         for (let i = 0; i < marks.length; i++) {
             let mark = marks[i];
-            testQuotes('near ' + mark + ' #1', 'a"' + mark,    'a»' + mark);
-            testQuotes('near ' + mark + ' #2', mark + '" ',    mark + '» ');
-            testQuotes('near ' + mark + ' #3', mark + '"',     mark + '»');
-            testQuotes('near ' + mark + ' #4', mark + "\"\n",  mark + "»\n");
-            testQuotes('near ' + mark + ' #5', mark + "\"\t",  mark + "»\t");
+            testQuotes('near ' + mark + ' 1', 'a"' + mark,    'a»' + mark);
+            testQuotes('near ' + mark + ' 2', mark + '" ',    mark + '» ');
+            testQuotes('near ' + mark + ' 3', mark + '"',     mark + '»');
+            testQuotes('near ' + mark + ' 4', mark + "\"\n",  mark + "»\n");
+            testQuotes('near ' + mark + ' 5', mark + "\"\t",  mark + "»\t");
         }
 
         marks = [':'];
         for (let i = 0; i < marks.length; i++) {
             let mark = marks[i];
-            testQuotes('near ' + mark + ' #1 only', 'a"' + mark, 'a»' + mark);
+            testQuotes('near ' + mark + ' 1 only', 'a"' + mark, 'a»' + mark);
         }
 
         testQuotes('Привет.', '"Привет".', '«Привет».');
