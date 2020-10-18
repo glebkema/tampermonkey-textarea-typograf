@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.0
+// @version      0.4.01
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -45,23 +45,29 @@ class Typograf {
         if (text) {
             text = this.improveDash(text);
             text = this.improveQuotes(text);
+            text = this.improveSmile(text);
             text = this.improveYo(text);
         }
         return text;
     }
 
     improveDash(text) {
-        text = text.replace(/ - /gi, ' — ');
+        text = text.replace(/ - /g, ' — ');
         return text;
     }
 
     improveQuotes(text) {
         // TODO. regex with (?<=)
         // TODO. ??? is /i needed
-        text = text.replace(/^"/gi, '«');
-        text = text.replace(/"$/gi, '»');
-        text = text.replace(/([\(\s])"/gi, '$1«');
-        text = text.replace(/"([.,;\s\)])/gi, '»$1');  // :\!\?
+        text = text.replace(/^"/g, '«');
+        text = text.replace(/"$/g, '»');
+        text = text.replace(/([\(\s])"/g, '$1«');
+        text = text.replace(/"([.,;\s\)])/g, '»$1');  // :\!\?
+        return text;
+    }
+
+    improveSmile(text) {
+        text = text.replace(/([:;])[—oо]?([D\)\(\|])/g, '$1-$2');
         return text;
     }
 

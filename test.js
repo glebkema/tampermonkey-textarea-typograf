@@ -42,26 +42,41 @@ describe('class Typograf', function() {
     });
 
     context('method improveSmile()', function() {
+        let eyes = {
+            'normal' : ':',
+            'wink'   : ';',
+        };
+        let noses = {
+            'without a nose'           : '',
+            'with a long nose'         : '—',
+            'with a clown`s nose (eng)': 'o',
+            'with a clown`s nose (rus)': 'о',
+        };
         let smiles = {
             'smile'  : ')',
             'sad'    : '(',
             'neutral': '|',
             'laugh'  : 'D',
         };
-        for (let name in smiles) {
-            let canonic = ':-' + smiles[name];
-            testSmile(name + ' without a nose',            ':'  + smiles[name], canonic);
-            testSmile(name + ' with a long nose',          ':—' + smiles[name], canonic);
-            testSmile(name + ' with a clown`s nose (eng)', ':o' + smiles[name], canonic);
-            testSmile(name + ' with a clown`s nose (rus)', ':о' + smiles[name], canonic);
+        for (let eye_name in eyes) {
+            let eye = eyes[eye_name];
+            for (let smile_name in smiles) {
+                let smile = smiles[smile_name];
+                let canonic = eye + '-' + smile;
+                for (let nose_name in noses) {
+                    let nose = noses[nose_name];
+                    let name = eye_name + ' ' + smile_name + ' ' + nose_name;
+                    testSmile(name, eye + nose + smile, canonic);
+                }
+            }
         }
     });
 
     context('method improveYo()', function() {
         testYo('Ещё', 'Еще еще "еще" (Еще и еще). Еще еще, еще. И еще',
-                      'Ещё ещё «ещё» (Ещё и ещё). Ещё ещё, ещё. И ещё');
+                      'Ещё ещё "ещё" (Ещё и ещё). Ещё ещё, ещё. И ещё');  // NB: "
         testYo('Неё', 'Нее ее неее. Длиннее еен нее, нее... нее',
-                      'Неё ее неее. Длиннее еен неё, неё... неё');
+                      'Неё её неее. Длиннее еен неё, неё... неё');
     });
 
 });
@@ -86,6 +101,6 @@ function testSmile(description, before, after) {
 
 function testYo(description, before, after) {
     it(description, function() {
-        assert.equal(typograf.improveSmile(before), after);
+        assert.equal(typograf.improveYo(before), after);
     });
 }
