@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Textarea Typograf
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
-// @description  Replaces hyphens and quotation marks. Works only in the <textarea>. If you select a part of the text, only that part will be processed.
+// @description  Replaces hyphens, quotation marks, uncanonic smiles and "yo" in isome russian words.
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.3.4
+// @version      0.4.04
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -16,69 +16,93 @@
 // @author glebkema
 // ==/OpenUserJS==
 
-(function() {
-    'use strict';
+'use strict';
 
-    var element = document.activeElement;
+if('undefined' !== typeof document) {  // = if not a test
+    const element = document.activeElement;
     if (element && 'textarea' == element.tagName.toLowerCase() && element.value) {
-        var start = element.selectionStart;
-        var end = element.selectionEnd;
-        if (start == end) {
-            element.value = typograf(element.value);
+        let typograf = new Typograf();
+        const start = element.selectionStart;
+        const end = element.selectionEnd;
+        if (start === end) {
+            element.value = typograf.improve(element.value);
         } else {
-            var selected = element.value.substring(start, end);
-            var length = element.value.length;
-            element.value = element.value.substring(0, start) + typograf(selected) + element.value.substring(end, length);
+            let selected = element.value.substring(start, end);
+            let length = element.value.length;
+            element.value = element.value.substring(0, start) + typograf.improve(selected) + element.value.substring(end, length);
         }
     } else {
         // console.info('Start editing a non-empty textarea before calling the script');
     }
+}
 
-    // console.log(typograf('Еще она - не очень еще "еще" любила (Еще и еще). Еще вот еще, еще. И еще'));
-    // console.log(typograf('Нее ее. Длиннее еен нее.'));
+class Typograf {
+    constructor() {
+        // this.text = text;  // ??? use this.text in methods // ??? how to test it
+    }
 
-    function typograf(text) {
+    improve(text) {
         if (text) {
-            // dash
-            text = text.replace(/ - /gi, ' — ');
-
-            // quotes
-            text = text.replace(/^"/gi, '«');
-            text = text.replace(/"$/gi, '»');
-            text = text.replace(/([\(\s])"/gi, '$1«');
-            text = text.replace(/"([.,;\s\)])/gi, '»$1');
-
-            // words with a capital letter and yo
-            text = checkWords(text, 'Ещё,Её,Моё,Неё,Своё,Твоё');
-            text = checkWords(text, 'Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
-            text = checkWords(text, 'Василёк,Мотылёк,Огонёк,Пенёк,Ручеёк');
-            text = checkWords(text, 'Затёк,Натёк,Потёк');
-            text = checkWords(text, 'Грёза,Грёзы,Слёзы');
+            text = this.improveDash(text);
+            text = this.improveQuotes(text);
+            text = this.improveSmile(text);
+            text = this.improveYo(text);
         }
         return text;
     }
 
-    function checkWords(text, words) {
+    improveDash(text) {
+        text = text.replace(/ - /g, ' — ');
+        return text;
+    }
+
+    improveQuotes(text) {
+        text = text.replace(/(?<=^|[\(\s])"/g, '«');
+        text = text.replace(/"(?=$|[.,;:\!\?\s\)])/g, '»');
+        return text;
+    }
+
+    improveSmile(text) {
+        text = text.replace(/([:;])[—oо]?([D\)\(\|])/g, '$1-$2');
+        return text;
+    }
+
+    improveYo(text) {
+        // setup words with a capital letter and yo
+        text = this.checkWords(text, 'Её,Ещё,Моё,Неё,Своё,Твоё');
+        text = this.checkWords(text, 'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
+        text = this.checkWords(text, 'Василёк,Мотылёк,Огонёк,Пенёк,Ручеёк');
+        text = this.checkWords(text, 'Затёк,Натёк,Потёк');
+        text = this.checkWords(text, 'Грёза,Грёзы,Слёзы');
+        return text;
+    }
+
+    checkWords(text, words) {
         if ('string' === typeof words) {
             words = words.split(',');
         }
-        for (var i = 0; i < words.length; i++) {
+        for (let i = 0; i < words.length; i++) {
             let word = words[i].trim();
             if (word) {
                 let find = word.replace('ё', 'е').replace('Ё', 'Е');
-                text = replaceWords(text, find, word);
+                text = this.replaceWords(text, find, word);
             }
         }
         return text;
     }
 
-    function replaceWords(text, find, replace) {
+    replaceWords(text, find, replace) {
         // NB: \b doesn't work for russian words
         // 1) word starts with a capital letter
-        var regex = new RegExp('(' + find + ')(?=[^а-яё]|$)', 'g');
+        let regex = new RegExp('(' + find + ')(?=[^а-яё]|$)', 'g');
         text = text.replace(regex, replace);
         // 2) word in lowercase
         regex = new RegExp('(?<=[^А-Яа-яЁё]|^)(' + find.toLowerCase() + ')(?=[^а-яё]|$)', 'g');
-        return text.replace(regex, replace.toLowerCase());
+        text = text.replace(regex, replace.toLowerCase());
+        return text;
     }
-})();
+}
+
+module.exports = {
+    Typograf: Typograf
+}
