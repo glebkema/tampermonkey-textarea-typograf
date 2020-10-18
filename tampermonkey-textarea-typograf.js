@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.01
+// @version      0.4.02
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -62,7 +62,7 @@ class Typograf {
         text = text.replace(/^"/g, '«');
         text = text.replace(/"$/g, '»');
         text = text.replace(/([\(\s])"/g, '$1«');
-        text = text.replace(/"([.,;\s\)])/g, '»$1');  // :\!\?
+        text = text.replace(/"([.,;:\!\?\s\)])/g, '»$1');
         return text;
     }
 
