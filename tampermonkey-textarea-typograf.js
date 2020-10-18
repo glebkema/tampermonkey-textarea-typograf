@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Textarea Typograf
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
-// @description  Replaces hyphens and quotation marks. Works only in the <textarea>.
+// @description  Replaces hyphens, quotation marks, uncanonic smiles and "yo" in isome russian words.
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.03
+// @version      0.4.04
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
