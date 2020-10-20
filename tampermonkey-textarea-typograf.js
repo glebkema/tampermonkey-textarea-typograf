@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Textarea Typograf
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
-// @description  Replaces hyphens, quotation marks, uncanonic smiles and "yo" in isome russian words.
+// @description  Replaces hyphens, quotation marks, uncanonic smiles and "yo" in some russian words.
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.04
+// @version      0.4.05
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -18,7 +18,7 @@
 
 'use strict';
 
-if('undefined' !== typeof document) {  // = if not a test
+if('undefined' !== typeof document) { // if it's a browser
     const element = document.activeElement;
     if (element && 'textarea' == element.tagName.toLowerCase() && element.value) {
         let typograf = new Typograf();
@@ -103,6 +103,8 @@ class Typograf {
     }
 }
 
-module.exports = {
-    Typograf: Typograf
+if('undefined' !== typeof module) { // if it's a test
+    module.exports = {
+        Typograf: Typograf
+    }
 }
