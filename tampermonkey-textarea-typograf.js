@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.06
+// @version      0.4.07
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -21,6 +21,22 @@
 class Typograf {
     constructor() {
         // this.text = text;  // ??? use this.text in methods // ??? how to test it
+    }
+
+    run(element) {
+        if (element && 'textarea' == element.tagName.toLowerCase() && element.value) {
+            const start = element.selectionStart;
+            const end = element.selectionEnd;
+            if (start === end) {
+                element.value = this.improve(element.value);
+            } else {
+                let selected = element.value.substring(start, end);
+                let length = element.value.length;
+                element.value = element.value.substring(0, start) + this.improve(selected) + element.value.substring(end, length);
+            }
+        } else {
+            // console.info('Start editing a non-empty textarea before calling the script');
+        }
     }
 
     improve(text) {
@@ -87,21 +103,8 @@ class Typograf {
 
 // if it's a browser, not a test
 if('undefined' !== typeof document) {
-    const element = document.activeElement;
-    if (element && 'textarea' == element.tagName.toLowerCase() && element.value) {
-        let typograf = new Typograf();
-        const start = element.selectionStart;
-        const end = element.selectionEnd;
-        if (start === end) {
-            element.value = typograf.improve(element.value);
-        } else {
-            let selected = element.value.substring(start, end);
-            let length = element.value.length;
-            element.value = element.value.substring(0, start) + typograf.improve(selected) + element.value.substring(end, length);
-        }
-    } else {
-        // console.info('Start editing a non-empty textarea before calling the script');
-    }
+    let typograf = new Typograf();
+    typograf.run(document.activeElement);
 }
 
 // if it's a test by Node.js

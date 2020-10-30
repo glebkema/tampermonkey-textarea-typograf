@@ -1,5 +1,10 @@
 let assert = require('chai').assert;
-let Typograf = require('./tampermonkey-textarea-typograf.js').Typograf;
+
+// https://www.npmjs.com/package/jsdom-global
+// https://github.com/rstacruz/jsdom-global
+require('jsdom-global')();
+
+let Typograf = require('../tampermonkey-textarea-typograf.js').Typograf;
 let typograf = new Typograf();
 
 describe('class Typograf', function() {
@@ -83,6 +88,15 @@ describe('class Typograf', function() {
                       'Ещё ещё "ещё" (Ещё и ещё). Ещё ещё, ещё. И ещё');  // NB: "
         testYo('Неё', 'Нее ее неее. Длиннее еен нее, нее... нее',
                       'Неё её неее. Длиннее еен неё, неё... неё');
+    });
+
+    context('element', function() {
+        it('change the textarea content', function() {
+            let textarea = document.createElement('textarea');
+            textarea.value = '"test"';
+            typograf.run(textarea);
+            assert.equal(textarea.value, "«test»");
+        });
     });
 
 });
