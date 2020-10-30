@@ -21,6 +21,8 @@
     "eslint": "^7.11.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.1",
+    "jsdom": "16.4.0",
+    "jsdom-global": "3.0.2",
     "mocha": "^8.2.0"
   }
 }
