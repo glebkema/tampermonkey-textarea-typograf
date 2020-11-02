@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.08
+// @version      0.4.09
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none

@@ -88,18 +88,9 @@ describe('class Typograf', function() {
                       'Ещё ещё "ещё" (Ещё и ещё). Ещё ещё, ещё. И ещё');  // NB: "
         testYo('Её Неё', 'Нее ее неее. Ее длиннее еен нее, нее...нее',
                          'Неё её неее. Её длиннее еен неё, неё...неё');
-        doNotChangeYoInNomen('фельетон');
-        doNotChangeYoInNomen('корвет');
-        doNotChangeYoInNomen('портрет');
-        doNotChangeYoInNomen('шлем');
-        doNotChangeYoInNomen('подшлемник');
-        doNotChangeYoInVerb('бье');
-        doNotChangeYoInVerb('йде');
-        doNotChangeYoInVerb('лье');
-        doNotChangeYoInVerb('пье');
-        doNotChangeYoInVerb('рве');
-        doNotChangeYoInVerb('тре');
-        doNotChangeYoInVerb('шле');
+        testYoWord('Воробьём');
+        doNotChangeYoInNomen('корвет,подшлемник,портрет,шлем,фельетон');
+        doNotChangeYoInVerb('бье,йде,лье,пье,рве,тре,шле');
     });
 
     context('element', function() {
@@ -124,21 +115,29 @@ function doNotChangeYo(unchanged) {
 }
 
 function doNotChangeYoInNomen(unchanged) {
-    it('do not change "' + unchanged + '"', function() {
-        doNotChangeYo(unchanged);
-        doNotChangeYo(unchanged + 'е');
-    });
+    if (unchanged.indexOf(',') > -1) {
+        unchanged.split(',').forEach(doNotChangeYoInNomen);
+    } else {
+        it('do not change "' + unchanged + '"', function() {
+            doNotChangeYo(unchanged);
+            doNotChangeYo(unchanged + 'е');
+        });
+    }
 }
 
 function doNotChangeYoInVerb(unchanged) {
-    unchanged = 'вы' + unchanged;
-    it('do not change "' + unchanged + 'т"', function() {
-        doNotChangeYo(unchanged + 'м');
-        doNotChangeYo(unchanged + 'мся');
-        doNotChangeYo(unchanged + 'т');
-        doNotChangeYo(unchanged + 'те');
-        doNotChangeYo(unchanged + 'тся');
-    });
+    if (unchanged.indexOf(',') > -1) {
+        unchanged.split(',').forEach(doNotChangeYoInVerb);
+    } else {
+        unchanged = 'вы' + unchanged;
+        it('do not change "' + unchanged + 'т"', function() {
+            doNotChangeYo(unchanged + 'м');
+            doNotChangeYo(unchanged + 'мся');
+            doNotChangeYo(unchanged + 'т');
+            doNotChangeYo(unchanged + 'те');
+            doNotChangeYo(unchanged + 'тся');
+        });
+    }
 }
 
 function testQuotes(description, before, after) {
@@ -157,4 +156,9 @@ function testYo(description, before, after) {
     it(description, function() {
         assert.equal(typograf.improveYo(before), after);
     });
+}
+
+function testYoWord(word) {
+    let wordWithoutYo = word.replace('ё', 'е').replace('Ё', 'Е');
+    testYo(word, wordWithoutYo + ' ' + wordWithoutYo.toLowerCase(), word + ' ' + word.toLowerCase());
 }
