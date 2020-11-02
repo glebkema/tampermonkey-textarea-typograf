@@ -14,11 +14,11 @@ describe('class Typograf', function() {
             assert.equal(typograf.improveDash(' - '), ' — ');
         });
 
-        doNotChange('at the beginning and at the end', '- -');
-        doNotChange('close to the new line', " -\n- ");
-        doNotChange('close to the tabulation', " -\t- ");
-        doNotChange('close to the word', ' -word- ');
-        doNotChange('close to the punctuation mark', '.- ,- :- -)');
+        doNotChangeDash('at the beginning and at the end', '- -');
+        doNotChangeDash('close to the new line', " -\n- ");
+        doNotChangeDash('close to the tabulation', " -\t- ");
+        doNotChangeDash('close to the word', ' -word- ');
+        doNotChangeDash('close to the punctuation mark', '.- ,- :- -)');
     });
 
     context('method improveQuotes()', function() {
@@ -86,8 +86,20 @@ describe('class Typograf', function() {
     context('method improveYo()', function() {
         testYo('Ещё', 'Еще еще "еще" (Еще и еще). Еще еще, еще. И еще',
                       'Ещё ещё "ещё" (Ещё и ещё). Ещё ещё, ещё. И ещё');  // NB: "
-        testYo('Неё', 'Нее ее неее. Длиннее еен нее, нее... нее',
-                      'Неё её неее. Длиннее еен неё, неё... неё');
+        testYo('Её Неё', 'Нее ее неее. Ее длиннее еен нее, нее...нее',
+                         'Неё её неее. Её длиннее еен неё, неё...неё');
+        doNotChangeYoInNomen('фельетон');
+        doNotChangeYoInNomen('корвет');
+        doNotChangeYoInNomen('портрет');
+        doNotChangeYoInNomen('шлем');
+        doNotChangeYoInNomen('подшлемник');
+        doNotChangeYoInVerb('бье');
+        doNotChangeYoInVerb('йде');
+        doNotChangeYoInVerb('лье');
+        doNotChangeYoInVerb('пье');
+        doNotChangeYoInVerb('рве');
+        doNotChangeYoInVerb('тре');
+        doNotChangeYoInVerb('шле');
     });
 
     context('element', function() {
@@ -101,9 +113,31 @@ describe('class Typograf', function() {
 
 });
 
-function doNotChange(description, unchanged) {
+function doNotChangeDash(description, unchanged) {
     it('do not change ' + description, function() {
         assert.equal(typograf.improveDash(unchanged), unchanged);
+    });
+}
+
+function doNotChangeYo(unchanged) {
+    assert.equal(typograf.improveYo(unchanged), unchanged);
+}
+
+function doNotChangeYoInNomen(unchanged) {
+    it('do not change "' + unchanged + '"', function() {
+        doNotChangeYo(unchanged);
+        doNotChangeYo(unchanged + 'е');
+    });
+}
+
+function doNotChangeYoInVerb(unchanged) {
+    unchanged = 'вы' + unchanged;
+    it('do not change "' + unchanged + 'т"', function() {
+        doNotChangeYo(unchanged + 'м');
+        doNotChangeYo(unchanged + 'мся');
+        doNotChangeYo(unchanged + 'т');
+        doNotChangeYo(unchanged + 'те');
+        doNotChangeYo(unchanged + 'тся');
     });
 }
 
