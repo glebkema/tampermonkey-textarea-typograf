@@ -132,14 +132,19 @@ function compareYoVerb(core) {
     if (core.indexOf(',') > -1) {
         core.split(',').forEach(compareYoVerb);
     } else {
-        let coreWithoutYo = typograf.replaceAllYo(core);
+        let coreWithoutYo = typograf.removeAllYo(core);
         it(core + 'т', function() {
-            verbEndings.forEach(function(ending) {
-                compareYo(coreWithoutYo + ending, core + ending);  // starts with a capital letter
+            verbEndings.forEach(ending => {
+                // without prefix + starts with a capital letter
+                compareYo(coreWithoutYo + ending, core + ending);
+
+                // without prefix + in lowercase
                 before = coreWithoutYo.toLowerCase() + ending;
                 after = core.toLowerCase() + ending;
-                compareYo(before, after);  // withot capital letters
-                verbPrefixes.forEach(function(prefix) {
+                compareYo(before, after);
+
+                // with prefixes + in lowercase
+                verbPrefixes.forEach(prefix => {
                     compareYo(prefix + before, prefix + after);
                 });
             });
@@ -168,7 +173,7 @@ function testSmile(description, before, after) {
 function testYo(description, textWithYo = null) {
     textWithYo = textWithYo || description;
     textWithYo += ' ' + textWithYo.toLowerCase();
-    let textWithoutYo = typograf.replaceAllYo(textWithYo);
+    let textWithoutYo = typograf.removeAllYo(textWithYo);
     it(description, function() {
         compareYo(textWithoutYo, textWithYo);
     });

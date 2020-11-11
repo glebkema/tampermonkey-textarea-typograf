@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.10
+// @version      0.4.11
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -75,15 +75,15 @@ class Typograf {
 
         // list the cores of the verbs - with a capital letter and yo
         text = this.improveYoVerb(text, 'Бьё,йдё,Льё,Пьё,Рвё,Трё,Шлё');
-       return text;
+        return text;
     }
 
     improveYoVerb(text, list) {
-        return this.iterator(text, list, this.replaceVerb);
+        return this.iterator(text, list, this.replaceYoVerb.bind(this));
     }
 
     improveYoWord(text, list) {
-        return this.iterator(text, list, this.replaceWord);
+        return this.iterator(text, list, this.replaceYoWord.bind(this));
     }
 
     iterator(text, list, callback) {
@@ -93,39 +93,38 @@ class Typograf {
         for (let i = 0; i < list.length; i++) {
             let replace = list[i].trim();
             if (replace) {
-                let find = this.replaceAllYo(replace);
+                let find = this.removeAllYo(replace);
                 text = callback(text, find, replace);
             }
         }
         return text;
     }
 
-    replaceAllYo(text) {
+    removeAllYo(text) {
         return text.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
     }
 
-    replaceVerb(text, find, replace) {
+    replaceYo(text, find, replace, lookBack = '', lookAhead = '') {
         // NB: \b doesn't work for russian words
-        // 1) starts with a capital letter
-        let lookahead = '(?=[мтш])';
-        let regex = new RegExp(find + lookahead, 'g');
+        // 1) starts with a capital letter = just a begining of the word
+        let regex = new RegExp(find + lookAhead, 'g');
         text = text.replace(regex, replace);
-        // 2) in lowercase
-        regex = new RegExp('(?<![б-джзк-нп-тф-я]|ко|фе|Ко|Фе)' + find.toLowerCase() + lookahead, 'g');  // аеиоу
+        // 2) in lowercase = with a prefix ahead or without it
+        regex = new RegExp(lookBack + find.toLowerCase() + lookAhead, 'g');
         text = text.replace(regex, replace.toLowerCase());
         return text;
     }
 
-    replaceWord(text, find, replace) {
-        // NB: \b doesn't work for russian words
-        // 1) starts with a capital letter
-        let lookahead = '(?![а-яё])';
-        let regex = new RegExp(find + lookahead, 'g');
-        text = text.replace(regex, replace);
-        // 2) in lowercase
-        regex = new RegExp('(?<![А-Яа-яЁё])' + find.toLowerCase() + lookahead, 'g');
-        text = text.replace(regex, replace.toLowerCase());
-        return text;
+    replaceYoVerb(text, find, replace) {
+        return this.replaceYo(text, find, replace,
+            '(?<![б-джзк-нп-тф-я]|ко|фе|Ко|Фе)',  // аеиоу
+            '(?=[мтш])');
+    }
+
+    replaceYoWord(text, find, replace) {
+        return this.replaceYo(text, find, replace,
+            '(?<![А-Яа-яЁё])',
+            '(?![а-яё])');
     }
 }
 
