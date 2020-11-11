@@ -14,11 +14,11 @@ describe('class Typograf', function() {
             assert.equal(typograf.improveDash(' - '), ' — ');
         });
 
-        doNotChange('at the beginning and at the end', '- -');
-        doNotChange('close to the new line', " -\n- ");
-        doNotChange('close to the tabulation', " -\t- ");
-        doNotChange('close to the word', ' -word- ');
-        doNotChange('close to the punctuation mark', '.- ,- :- -)');
+        doNotChangeDash('at the beginning and at the end', '- -');
+        doNotChangeDash('close to the new line', " -\n- ");
+        doNotChangeDash('close to the tabulation', " -\t- ");
+        doNotChangeDash('close to the word', ' -word- ');
+        doNotChangeDash('close to the punctuation mark', '.- ,- :- -)');
     });
 
     context('method improveQuotes()', function() {
@@ -84,10 +84,13 @@ describe('class Typograf', function() {
     });
 
     context('method improveYo()', function() {
-        testYo('Ещё', 'Еще еще "еще" (Еще и еще). Еще еще, еще. И еще',
-                      'Ещё ещё "ещё" (Ещё и ещё). Ещё ещё, ещё. И ещё');  // NB: "
-        testYo('Неё', 'Нее ее неее. Длиннее еен нее, нее... нее',
-                      'Неё её неее. Длиннее еен неё, неё... неё');
+        testYo('Ещё', 'Ещё...Ещё: "Ещё" (Ещё, Ещё). Ещё');
+        testYo('Её Неё', 'Неё Её Неее. Её: "Её" (Её Неё) Длиннее Еен "Неё" Не Неё, Неё...Неё');
+
+        compareYoVerb('Бьё,Льё,Пьё,Рвё,Трё,Шлё');   // use all prefixes
+        compareYoVerb('Вьё,Даё,Жмё,Йдё,Мнё,Поё,Ткнё,Чтё,Шьё');  // use a part of the prefixes only or another ones
+        testYo('Воробьём');
+        doNotChangeYoInNomen('корвет,мнемотехника,подшлемник,портрет,фельетон,шлем');
     });
 
     context('element', function() {
@@ -101,10 +104,61 @@ describe('class Typograf', function() {
 
 });
 
-function doNotChange(description, unchanged) {
+function doNotChangeDash(description, unchanged) {
     it('do not change ' + description, function() {
         assert.equal(typograf.improveDash(unchanged), unchanged);
     });
+}
+
+function compareYo(before, after = null) {  // one paramter = has not be changed
+    after = after || before;
+    assert.equal(typograf.improveYo(before), after);
+}
+
+function doNotChangeYoInNomen(unchanged) {
+    if (unchanged.indexOf(',') > -1) {
+        unchanged.split(',').forEach(doNotChangeYoInNomen);
+    } else {
+        it('do not change "' + unchanged + '"', function() {
+            compareYo(unchanged);
+            compareYo(unchanged + 'е');
+        });
+    }
+}
+
+let verbEndings = ['м', 'мся', 'т', 'те', 'тся', 'шь'];
+let verbPrefixes = ['во', 'за', 'на', 'обо', 'ото', 'пере', 'по', 'подо', 'при', 'про', 'со', 'у'];
+function compareYoVerb(core) {
+    if (core.indexOf(',') > -1) {
+        core.split(',').forEach(compareYoVerb);
+    } else {
+        let coreWithoutYo = typograf.removeAllYo(core);
+        it(core + 'т', function() {
+            verbEndings.forEach(ending => {
+                let before = coreWithoutYo.toLowerCase() + ending;
+                let after = core.toLowerCase() + ending;
+
+                if ('Шлём' !== core + ending) {
+                    // without prefix + starts with a capital letter
+                    compareYo(coreWithoutYo + ending, core + ending);
+
+                    // without prefix + in lowercase
+                    compareYo(before, after);
+                }
+
+                // with prefixes + in lowercase
+                verbPrefixes.forEach(prefix => {
+                    compareYo(prefix + before, prefix + after);
+                });
+            });
+        });
+        unchanged = 'вы' + coreWithoutYo.toLowerCase();
+        it('do not change "' + unchanged + 'т"', function() {
+            verbEndings.forEach(ending => {
+                compareYo(unchanged + ending);
+            });
+        });
+    }
 }
 
 function testQuotes(description, before, after) {
@@ -119,8 +173,11 @@ function testSmile(description, before, after) {
     });
 }
 
-function testYo(description, before, after) {
+function testYo(description, textWithYo = null) {
+    textWithYo = textWithYo || description;
+    textWithYo += ' ' + textWithYo.toLowerCase();
+    let textWithoutYo = typograf.removeAllYo(textWithYo);
     it(description, function() {
-        assert.equal(typograf.improveYo(before), after);
+        compareYo(textWithoutYo, textWithYo);
     });
 }
