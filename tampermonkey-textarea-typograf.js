@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.11
+// @version      0.4.12
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -74,7 +74,12 @@ class Typograf {
         text = this.improveYoWord(text, 'Грёза,Грёзы,Слёзы');
 
         // list the cores of the verbs - with a capital letter and yo
-        text = this.improveYoVerb(text, 'Бьё,йдё,Льё,Пьё,Рвё,Трё,Шлё');
+        text = this.improveYoVerb(text, 'Бьё,Льё,Пьё,Рвё,Трё,Шлё');
+        text = this.improveYoVerb(text, 'Вьё,Даё,Жмё,Йдё,Мнё,Поё,Ткнё,Чтё,Шьё');
+
+        // fix the exceptions
+        text = text.replace(/(?<![А-Яa-я])Шлём(?!ся)/g, 'Шлем');
+        text = text.replace(/(?<![А-Яa-я])шлём(?!ся)/g, 'шлем');
         return text;
     }
 
@@ -118,7 +123,7 @@ class Typograf {
     replaceYoVerb(text, find, replace) {
         return this.replaceYo(text, find, replace,
             '(?<![б-джзк-нп-тф-я]|ко|фе|Ко|Фе)',  // аеиоу
-            '(?=[мтш])');
+            '(?=[мтш])(?!мо)');
     }
 
     replaceYoWord(text, find, replace) {

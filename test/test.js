@@ -87,10 +87,10 @@ describe('class Typograf', function() {
         testYo('Ещё', 'Ещё...Ещё: "Ещё" (Ещё, Ещё). Ещё');
         testYo('Её Неё', 'Неё Её Неее. Её: "Её" (Её Неё) Длиннее Еен "Неё" Не Неё, Неё...Неё');
 
-        compareYoVerb('Бьё,йдё,Льё,Пьё,Рвё,Трё,Шлё');
+        compareYoVerb('Бьё,Льё,Пьё,Рвё,Трё,Шлё');   // use all prefixes
+        compareYoVerb('Вьё,Даё,Жмё,Йдё,Мнё,Поё,Ткнё,Чтё,Шьё');  // use a part of the prefixes only or another ones
         testYo('Воробьём');
-        doNotChangeYoInNomen('корвет,мнемотехника,подшлемник,портрет,фельетон');
-        // doNotChangeYoInNomen('шлем');
+        doNotChangeYoInNomen('корвет,мнемотехника,подшлемник,портрет,фельетон,шлем');
     });
 
     context('element', function() {
@@ -135,13 +135,16 @@ function compareYoVerb(core) {
         let coreWithoutYo = typograf.removeAllYo(core);
         it(core + 'т', function() {
             verbEndings.forEach(ending => {
-                // without prefix + starts with a capital letter
-                compareYo(coreWithoutYo + ending, core + ending);
+                let before = coreWithoutYo.toLowerCase() + ending;
+                let after = core.toLowerCase() + ending;
 
-                // without prefix + in lowercase
-                before = coreWithoutYo.toLowerCase() + ending;
-                after = core.toLowerCase() + ending;
-                compareYo(before, after);
+                if ('Шлём' !== core + ending) {
+                    // without prefix + starts with a capital letter
+                    compareYo(coreWithoutYo + ending, core + ending);
+
+                    // without prefix + in lowercase
+                    compareYo(before, after);
+                }
 
                 // with prefixes + in lowercase
                 verbPrefixes.forEach(prefix => {
