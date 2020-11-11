@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.09
+// @version      0.4.10
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -66,36 +66,64 @@ class Typograf {
     }
 
     improveYo(text) {
-        // setup words with a capital letter and yo
-        text = this.checkWords(text, 'Её,Ещё,Моё,Неё,Своё,Твоё');
-        text = this.checkWords(text, 'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
-        text = this.checkWords(text, 'Василёк,Мотылёк,Огонёк,Пенёк,Ручеёк');
-        text = this.checkWords(text, 'Затёк,Натёк,Потёк');
-        text = this.checkWords(text, 'Грёза,Грёзы,Слёзы');
-        return text;
+        // list the words - with a capital letter and yo
+        text = this.improveYoWord(text, 'Её,Ещё,Моё,Неё,Своё,Твоё');
+        text = this.improveYoWord(text, 'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
+        text = this.improveYoWord(text, 'Василёк,Мотылёк,Огонёк,Пенёк,Ручеёк');
+        text = this.improveYoWord(text, 'Затёк,Натёк,Потёк');
+        text = this.improveYoWord(text, 'Грёза,Грёзы,Слёзы');
+
+        // list the cores of the verbs - with a capital letter and yo
+        text = this.improveYoVerb(text, 'Бьё,йдё,Льё,Пьё,Рвё,Трё,Шлё');
+       return text;
     }
 
-    checkWords(text, words) {
-        if ('string' === typeof words) {
-            words = words.split(',');
+    improveYoVerb(text, list) {
+        return this.iterator(text, list, this.replaceVerb);
+    }
+
+    improveYoWord(text, list) {
+        return this.iterator(text, list, this.replaceWord);
+    }
+
+    iterator(text, list, callback) {
+        if ('string' === typeof list) {
+            list = list.split(',');
         }
-        for (let i = 0; i < words.length; i++) {
-            let word = words[i].trim();
-            if (word) {
-                let find = word.replace('ё', 'е').replace('Ё', 'Е');
-                text = this.replaceWords(text, find, word);
+        for (let i = 0; i < list.length; i++) {
+            let replace = list[i].trim();
+            if (replace) {
+                let find = this.replaceAllYo(replace);
+                text = callback(text, find, replace);
             }
         }
         return text;
     }
 
-    replaceWords(text, find, replace) {
+    replaceAllYo(text) {
+        return text.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
+    }
+
+    replaceVerb(text, find, replace) {
         // NB: \b doesn't work for russian words
-        // 1) word starts with a capital letter
-        let regex = new RegExp('(' + find + ')(?=[^а-яё]|$)', 'g');
+        // 1) starts with a capital letter
+        let lookahead = '(?=[мтш])';
+        let regex = new RegExp(find + lookahead, 'g');
         text = text.replace(regex, replace);
-        // 2) word in lowercase
-        regex = new RegExp('(?<=[^А-Яа-яЁё]|^)(' + find.toLowerCase() + ')(?=[^а-яё]|$)', 'g');
+        // 2) in lowercase
+        regex = new RegExp('(?<![б-джзк-нп-тф-я]|ко|фе|Ко|Фе)' + find.toLowerCase() + lookahead, 'g');  // аеиоу
+        text = text.replace(regex, replace.toLowerCase());
+        return text;
+    }
+
+    replaceWord(text, find, replace) {
+        // NB: \b doesn't work for russian words
+        // 1) starts with a capital letter
+        let lookahead = '(?![а-яё])';
+        let regex = new RegExp(find + lookahead, 'g');
+        text = text.replace(regex, replace);
+        // 2) in lowercase
+        regex = new RegExp('(?<![А-Яа-яЁё])' + find.toLowerCase() + lookahead, 'g');
         text = text.replace(regex, replace.toLowerCase());
         return text;
     }

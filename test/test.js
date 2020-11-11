@@ -84,13 +84,13 @@ describe('class Typograf', function() {
     });
 
     context('method improveYo()', function() {
-        testYo('Ещё', 'Еще еще "еще" (Еще и еще). Еще еще, еще. И еще',
-                      'Ещё ещё "ещё" (Ещё и ещё). Ещё ещё, ещё. И ещё');  // NB: "
-        testYo('Её Неё', 'Нее ее неее. Ее длиннее еен нее, нее...нее',
-                         'Неё её неее. Её длиннее еен неё, неё...неё');
-        testYoWord('Воробьём');
-        doNotChangeYoInNomen('корвет,подшлемник,портрет,шлем,фельетон');
-        doNotChangeYoInVerb('бье,йде,лье,пье,рве,тре,шле');
+        testYo('Ещё', 'Ещё...Ещё: "Ещё" (Ещё, Ещё). Ещё');
+        testYo('Её Неё', 'Неё Её Неее. Её: "Её" (Её Неё) Длиннее Еен "Неё" Не Неё, Неё...Неё');
+
+        compareYoVerb('Бьё,йдё,Льё,Пьё,Рвё,Трё,Шлё');
+        testYo('Воробьём');
+        doNotChangeYoInNomen('корвет,мнемотехника,подшлемник,портрет,фельетон');
+        // doNotChangeYoInNomen('шлем');
     });
 
     context('element', function() {
@@ -110,8 +110,9 @@ function doNotChangeDash(description, unchanged) {
     });
 }
 
-function doNotChangeYo(unchanged) {
-    assert.equal(typograf.improveYo(unchanged), unchanged);
+function compareYo(before, after = null) {  // one paramter = has not be changed
+    after = after || before;
+    assert.equal(typograf.improveYo(before), after);
 }
 
 function doNotChangeYoInNomen(unchanged) {
@@ -119,23 +120,35 @@ function doNotChangeYoInNomen(unchanged) {
         unchanged.split(',').forEach(doNotChangeYoInNomen);
     } else {
         it('do not change "' + unchanged + '"', function() {
-            doNotChangeYo(unchanged);
-            doNotChangeYo(unchanged + 'е');
+            compareYo(unchanged);
+            compareYo(unchanged + 'е');
         });
     }
 }
 
-function doNotChangeYoInVerb(unchanged) {
-    if (unchanged.indexOf(',') > -1) {
-        unchanged.split(',').forEach(doNotChangeYoInVerb);
+let verbEndings = ['м', 'мся', 'т', 'те', 'тся', 'шь'];
+let verbPrefixes = ['во', 'за', 'на', 'обо', 'ото', 'пере', 'по', 'подо', 'при', 'про', 'со', 'у'];
+function compareYoVerb(core) {
+    if (core.indexOf(',') > -1) {
+        core.split(',').forEach(compareYoVerb);
     } else {
-        unchanged = 'вы' + unchanged;
+        let coreWithoutYo = typograf.replaceAllYo(core);
+        it(core + 'т', function() {
+            verbEndings.forEach(function(ending) {
+                compareYo(coreWithoutYo + ending, core + ending);  // starts with a capital letter
+                before = coreWithoutYo.toLowerCase() + ending;
+                after = core.toLowerCase() + ending;
+                compareYo(before, after);  // withot capital letters
+                verbPrefixes.forEach(function(prefix) {
+                    compareYo(prefix + before, prefix + after);
+                });
+            });
+        });
+        unchanged = 'вы' + coreWithoutYo.toLowerCase();
         it('do not change "' + unchanged + 'т"', function() {
-            doNotChangeYo(unchanged + 'м');
-            doNotChangeYo(unchanged + 'мся');
-            doNotChangeYo(unchanged + 'т');
-            doNotChangeYo(unchanged + 'те');
-            doNotChangeYo(unchanged + 'тся');
+            verbEndings.forEach(ending => {
+                compareYo(unchanged + ending);
+            });
         });
     }
 }
@@ -152,13 +165,11 @@ function testSmile(description, before, after) {
     });
 }
 
-function testYo(description, before, after) {
+function testYo(description, textWithYo = null) {
+    textWithYo = textWithYo || description;
+    textWithYo += ' ' + textWithYo.toLowerCase();
+    let textWithoutYo = typograf.replaceAllYo(textWithYo);
     it(description, function() {
-        assert.equal(typograf.improveYo(before), after);
+        compareYo(textWithoutYo, textWithYo);
     });
-}
-
-function testYoWord(word) {
-    let wordWithoutYo = word.replace('ё', 'е').replace('Ё', 'Е');
-    testYo(word, wordWithoutYo + ' ' + wordWithoutYo.toLowerCase(), word + ' ' + word.toLowerCase());
 }
