@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.12
+// @version      0.4.13
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -68,7 +68,8 @@ class Typograf {
     improveYo(text) {
         // list the words - with a capital letter and yo
         text = this.improveYoWord(text, 'Её,Ещё,Моё,Неё,Своё,Твоё');
-        text = this.improveYoWord(text, 'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
+        text = this.improveYoWord(text, 'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,' +
+            'Огнём,Своём,Твоём');
         text = this.improveYoWord(text, 'Василёк,Мотылёк,Огонёк,Пенёк,Ручеёк');
         text = this.improveYoWord(text, 'Затёк,Натёк,Потёк');
         text = this.improveYoWord(text, 'Грёза,Грёзы,Слёзы');
@@ -78,8 +79,8 @@ class Typograf {
         text = this.improveYoVerb(text, 'Вьё,Даё,Жмё,Йдё,Мнё,Поё,Ткнё,Чтё,Шьё');
 
         // fix the exceptions
-        text = text.replace(/(?<![А-Яa-я])Шлём(?!ся)/g, 'Шлем');
-        text = text.replace(/(?<![А-Яa-я])шлём(?!ся)/g, 'шлем');
+        text = text.replace(/Шлём/g, 'Шлем');
+        text = text.replace(/(?<![А-Яa-я])шлём/g, 'шлем');
         return text;
     }
 
@@ -109,21 +110,24 @@ class Typograf {
         return text.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
     }
 
-    replaceYo(text, find, replace, lookBack = '', lookAhead = '') {
+    replaceYo(text, find, replace, lookBack = '', lookAhead = '', flags2 = 'g') {
         // NB: \b doesn't work for russian words
         // 1) starts with a capital letter = just a begining of the word
         let regex = new RegExp(find + lookAhead, 'g');
         text = text.replace(regex, replace);
         // 2) in lowercase = with a prefix ahead or without it
-        regex = new RegExp(lookBack + find.toLowerCase() + lookAhead, 'g');
+        regex = new RegExp(lookBack + find.toLowerCase() + lookAhead, flags2);
         text = text.replace(regex, replace.toLowerCase());
         return text;
     }
 
     replaceYoVerb(text, find, replace) {
         return this.replaceYo(text, find, replace,
-            '(?<![б-джзк-нп-тф-я]|ко|фе|Ко|Фе)',  // аеиоу
-            '(?=[мтш])(?!мо)');
+            '(?<![б-джзк-нп-тф-я]|ко|фе)',  // аеиоу + дст
+            // '(?<![б-ежзк-нпрф-я]|ко|фе)',  // аеиоу + дст
+            //'(?<=[^а-я]|[аеиоу])(?<!ко|фе)',
+            '(?=[мтш])(?!мо)',
+            'gi');
     }
 
     replaceYoWord(text, find, replace) {
@@ -143,7 +147,7 @@ if('undefined' !== typeof document) {
 if (module) {
     module.exports = {
         Typograf: Typograf
-    }
+    };
 } else {
     var module; // hack for Tampermonkey's eslint
 }

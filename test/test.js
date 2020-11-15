@@ -90,7 +90,7 @@ describe('class Typograf', function() {
         compareYoVerb('Бьё,Льё,Пьё,Рвё,Трё,Шлё');   // use all prefixes
         compareYoVerb('Вьё,Даё,Жмё,Йдё,Мнё,Поё,Ткнё,Чтё,Шьё');  // use a part of the prefixes only or another ones
         testYo('Воробьём');
-        doNotChangeYoInNomen('корвет,мнемотехника,подшлемник,портрет,фельетон,шлем');
+        doNotChangeYoInNomen('Корвет,Мнемотехника,Подшлемник,Портрет,Фельетон,Шлем');
     });
 
     context('element', function() {
@@ -121,7 +121,8 @@ function doNotChangeYoInNomen(unchanged) {
     } else {
         it('do not change "' + unchanged + '"', function() {
             compareYo(unchanged);
-            compareYo(unchanged + 'е');
+            compareYo(unchanged.toLowerCase());
+            compareYo(unchanged.toLowerCase() + 'е');
         });
     }
 }
@@ -138,7 +139,7 @@ function compareYoVerb(core) {
                 let before = coreWithoutYo.toLowerCase() + ending;
                 let after = core.toLowerCase() + ending;
 
-                if ('Шлём' !== core + ending) {
+                if ('Шлё' !== core && 'м' !== ending[0]) {
                     // without prefix + starts with a capital letter
                     compareYo(coreWithoutYo + ending, core + ending);
 
