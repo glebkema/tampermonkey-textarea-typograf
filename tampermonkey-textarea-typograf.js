@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.15
+// @version      0.4.16
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -85,8 +85,8 @@ class Typograf {
 			'Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Трё,Чтё,Шлё,Шьё');
 
 		// verbs - fix the exceptions
-		text = text.replace(/Шлём/g, 'Шлем');
-		text = text.replace(/(?<![А-Яa-я])шлём/g, 'шлем');
+		text = this.replaceException(text, 'Расстаёт', '(?![а-дж-я])');
+		text = this.replaceException(text, 'Шлём');
 
 		// list of the words (with a capital letter and yo)
 		text = this.improveYoWord(text, null,
@@ -129,8 +129,17 @@ class Typograf {
 		return text.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
 	}
 
+	replaceException(text, exception, lookAhead = '') {
+		const replace = this.removeAllYo(exception);
+		let regex = new RegExp(exception + lookAhead, 'g');
+		text = text.replace(regex, replace);
+		regex = new RegExp('(?<![А-Яa-я])' + exception.toLowerCase() + lookAhead, 'g');
+		text = text.replace(regex, replace.toLowerCase());
+		return text;
+	}
+
 	replaceYo(text, find, replace,
-		lookBack = '(?<![б-джзй-нп-тф-я])', // -аеиоу
+		lookBack = '(?<![б-джзй-нп-тф-я])', // +аеиоу
 		lookAhead = '(?=[мтш])'
 	) {
 		let regex;
@@ -150,12 +159,17 @@ class Typograf {
 	replaceYoVerb(text, mode, find, replace) {
 		if (MODE_EXCEPTIONS === mode) {
 			return this.replaceYo(text, find, replace,
-				'(?<![б-джзй-нп-тф-я]|ко|фе)', // -аеиоу -корвет -фельетон
-				'(?=[мтш])(?!мо)'); // -мнемо...
+				'(?<![б-джзй-нп-тф-я]|ко|фе)', // +аеиоу -"корвет" -"фельетон"
+				'(?=[мтш])(?!мо)'); // -"мнемо"
 		}
 		if (MODE_EXTRA_PREFIXES === mode) {
-			return this.replaceYo(text, find, replace,
-				'(?<![гжк-нпрф-я])'); // -аеиоу -бвдзст
+			let lookBack = '(?<![гжк-нпрф-я])'; // +аеиоу +бвдзст
+			if ('Даё' === replace) {
+				lookBack = '(?<![гжк-нпрф-ъь-я])'; // +ы
+			} else if ('Стаё' === replace) {
+				lookBack = '(?<![гжк-нпрф-я]|ра)'; // -"вы/за/от/подрастает"
+			}
+			return this.replaceYo(text, find, replace, lookBack);
 		}
 		if (MODE_NO_CAPITAL_LETTER === mode) {
 			return this.replaceYo(text, find.toLowerCase(), replace);
@@ -166,7 +180,7 @@ class Typograf {
 		}
 		if (MODE_NO_SUFFIXES === mode) {
 			return this.replaceYo(text, find, replace,
-				'(?<![б-джзй-нп-тф-я])', // -аеиоу
+				'(?<![б-джзй-нп-тф-я])', // +аеиоу
 				'(?![а-яё])');
 		}
 		// MODE_STANDARD
