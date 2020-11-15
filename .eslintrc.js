@@ -1,4 +1,5 @@
 module.exports = {
+	// https://eslint.org/docs/2.13.1/user-guide/configuring
 	// https://github.com/Tampermonkey/tampermonkey/issues/865#issuecomment-589987608
 	"env": {
 		"browser": true,

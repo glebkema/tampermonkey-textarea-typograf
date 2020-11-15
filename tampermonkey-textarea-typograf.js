@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.14
+// @version      0.4.15
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -16,13 +16,14 @@
 // @author glebkema
 // ==/OpenUserJS==
 
-// 'use strict';
+'use strict';
 
+const MODE_EXCEPTIONS = 'exceptions';
+const MODE_EXTRA_PREFIXES = 'extraPrefixes';
+const MODE_NO_CAPITAL_LETTER = 'noCapitalLetter';
+const MODE_NO_PREFIXES = 'noPrefixes';
+const MODE_NO_SUFFIXES = 'noSuffixes';
 const MODE_STANDARD = 'standard';
-const MODE_EXTRA_SUFFIXES = 'extra_suffixes';
-const MODE_NO_CAPITAL_LETTER = 'no_capital_letter';
-const MODE_NO_PREFIXES = 'no_prefixes';
-const MODE_NO_SUFFIXES = 'no_suffixes';
 
 class Typograf {
 	run(element) {
@@ -70,17 +71,18 @@ class Typograf {
 
 	improveYo(text) {
 		// verbs - list of the cores (with a capital letter and yo)
-		text = this.improveYoVerb(text, MODE_STANDARD,
-			'Бьё,Вернё,Врё,Вьё,Даё,Жмё,Жрё,Льё,Мнё,Несё,Орё,'
-			+ 'Плывё,Поё,Прё,Пьё,Рвё,Ткнё,Трё,Чтё,Шлё,Шьё');
-		text = this.improveYoVerb(text, MODE_EXTRA_SUFFIXES,
-			'');
+		text = this.improveYoVerb(text, MODE_EXCEPTIONS,
+			'Льё,Мнё,Рвё');
+		text = this.improveYoVerb(text, MODE_EXTRA_PREFIXES,
+			'Вернё,Даё,Орё,Плывё,Поё,Стаё');
 		text = this.improveYoVerb(text, MODE_NO_CAPITAL_LETTER,
-			'йдё,ймё');
+			'Йдё,Ймё');
 		text = this.improveYoVerb(text, MODE_NO_PREFIXES,
 			'Идё,Начнё,Обернё,Придё,Улыбнё');
 		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
 			'Шёл');
+		text = this.improveYoVerb(text, MODE_STANDARD,
+			'Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Трё,Чтё,Шлё,Шьё');
 
 		// verbs - fix the exceptions
 		text = text.replace(/Шлём/g, 'Шлем');
@@ -127,22 +129,48 @@ class Typograf {
 		return text.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
 	}
 
-	replaceYo(text, find, replace, lookBack = '', lookAhead = '', flags2 = 'g') {
+	replaceYo(text, find, replace,
+		lookBack = '(?<![б-джзй-нп-тф-я])', // -аеиоу
+		lookAhead = '(?=[мтш])'
+	) {
+		let regex;
+		let findLowerCase = find.toLowerCase();
 		// NB: \b doesn't work for russian words
 		// 1) starts with a capital letter = just a begining of the word
-		let regex = new RegExp(find + lookAhead, 'g');
-		text = text.replace(regex, replace);
+		if (find !== findLowerCase) {
+			regex = new RegExp(find + lookAhead, 'g');
+			text = text.replace(regex, replace);
+		}
 		// 2) in lowercase = with a prefix ahead or without it
-		regex = new RegExp(lookBack + find.toLowerCase() + lookAhead, flags2);
+		regex = new RegExp(lookBack + findLowerCase + lookAhead, 'gi');
 		text = text.replace(regex, replace.toLowerCase());
 		return text;
 	}
 
 	replaceYoVerb(text, mode, find, replace) {
-		return this.replaceYo(text, find, replace,
-			'(?<![б-джзк-нп-тф-я]|ко|фе)', // аеиоу + дст
-			'(?=[мтш])(?!мо)',
-			'gi');
+		if (MODE_EXCEPTIONS === mode) {
+			return this.replaceYo(text, find, replace,
+				'(?<![б-джзй-нп-тф-я]|ко|фе)', // -аеиоу -корвет -фельетон
+				'(?=[мтш])(?!мо)'); // -мнемо...
+		}
+		if (MODE_EXTRA_PREFIXES === mode) {
+			return this.replaceYo(text, find, replace,
+				'(?<![гжк-нпрф-я])'); // -аеиоу -бвдзст
+		}
+		if (MODE_NO_CAPITAL_LETTER === mode) {
+			return this.replaceYo(text, find.toLowerCase(), replace);
+		}
+		if (MODE_NO_PREFIXES === mode) {
+			return this.replaceYo(text, find, replace,
+				'(?<![А-Яа-яЁё])');
+		}
+		if (MODE_NO_SUFFIXES === mode) {
+			return this.replaceYo(text, find, replace,
+				'(?<![б-джзй-нп-тф-я])', // -аеиоу
+				'(?![а-яё])');
+		}
+		// MODE_STANDARD
+		return this.replaceYo(text, find, replace);
 	}
 
 	replaceYoWord(text, mode, find, replace) {

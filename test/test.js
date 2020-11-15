@@ -7,6 +7,9 @@ require('jsdom-global')();
 let Typograf = require('../tampermonkey-textarea-typograf.js').Typograf;
 let typograf = new Typograf();
 
+let verbPrefixes = ['во', 'за', 'на', 'обо', 'ото', 'пере', 'по', 'подо', 'при', 'про', 'со', 'у'];
+let verbSuffixes = ['м', 'мся', 'т', 'те', 'тесь', 'тся', 'шь'];
+
 describe('class Typograf', function() {
 
 	context('method improveDash()', function() {
@@ -87,10 +90,33 @@ describe('class Typograf', function() {
 		testYo('Ещё', 'Ещё...Ещё: "Ещё" (Ещё, Ещё). Ещё');
 		testYo('Её Неё', 'Неё Её Неее. Её: "Её" (Её Неё) Длиннее Еен "Неё" Не Неё, Неё...Неё');
 
-		compareYoVerb('Бьё,Льё,Пьё,Рвё,Трё,Шлё');   // use all prefixes
-		compareYoVerb('Вьё,Даё,Жмё,Йдё,Мнё,Поё,Ткнё,Чтё,Шьё');  // use a part of the prefixes only or another ones
+		// MODE_STANDARD
+		compareYoVerb('Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Трё,Чтё,Шлё,Шьё');
 		testYo('Воробьём');
-		doNotChangeYoInNomen('Корвет,Мнемотехника,Подшлемник,Портрет,Фельетон,Шлем');
+
+		// MODE_EXCEPTIONS
+		compareYoVerb('Льё,Мнё,Рвё');
+		doNotChangeYoInNomen('Корвет,Мнемо,Подшлемник,Портрет,Пьезо,Рвение,'
+			+ 'Сомнение,Трение,Треска,Фельетон,Шлем,Чтение');
+
+		// MODE_EXTRA_PREFIXES
+		compareYoVerb('Вернё', ['от', 'под', 'раз', 'с']);
+		compareYoVerb('Даё', ['воз', 'вы', 'об', 'от', 'с']); // !!! вы
+		compareYoVerb('Орё', ['об', 'раз']);
+		compareYoVerb('Плывё', ['вс', 'об', 'от', 'под']);
+		compareYoVerb('Поё', ['вос', 'от', 'под', 'рас', 'с']);
+		compareYoVerb('Стаё', ['в', 'от']);
+		doNotChangeYoInNomen('расстает'); // !!! send a verb as nomen :(
+
+		// MODE_NO_CAPITAL_LETTER
+		// compareYoVerb('Йдё,Ймё');
+
+		// MODE_NO_PREFIXES
+		// compareYoVerb('Идё,Начнё,Обернё,Придё,Улыбнё');
+
+		// MODE_NO_SUFFIXES
+		// compareYoVerb('Шёл');
+
 	});
 
 	context('element', function() {
@@ -127,15 +153,21 @@ function doNotChangeYoInNomen(unchanged) {
 	}
 }
 
-let verbEndings = ['м', 'мся', 'т', 'те', 'тся', 'шь'];
-let verbPrefixes = ['во', 'за', 'на', 'обо', 'ото', 'пере', 'по', 'подо', 'при', 'про', 'со', 'у'];
-function compareYoVerb(core) {
+function compareYoVerb(core, prefixes = [], suffixes = []) {
 	if (core.indexOf(',') > -1) {
-		core.split(',').forEach(compareYoVerb);
+		core.split(',').forEach(function(value) {
+			compareYoVerb(value, prefixes, suffixes);
+		});
 	} else {
+		const showPrefixes = !!prefixes.length; // !!! comment it
+		const showSuffixes = !!suffixes.length; // !!! comment it
+		prefixes = [].concat(verbPrefixes, prefixes);
+		suffixes = [].concat(verbSuffixes, suffixes);
+		if (showPrefixes) console.log(core, prefixes); // !!! comment it
+		if (showSuffixes) console.log(core, suffixes); // !!! comment it
 		let coreWithoutYo = typograf.removeAllYo(core);
 		it(core + 'т', function() {
-			verbEndings.forEach(ending => {
+			suffixes.forEach(ending => {
 				let before = coreWithoutYo.toLowerCase() + ending;
 				let after = core.toLowerCase() + ending;
 
@@ -148,14 +180,14 @@ function compareYoVerb(core) {
 				}
 
 				// with prefixes + in lowercase
-				verbPrefixes.forEach(prefix => {
+				prefixes.forEach(prefix => {
 					compareYo(prefix + before, prefix + after);
 				});
 			});
 		});
 		let unchanged = 'вы' + coreWithoutYo.toLowerCase();
 		it('do not change "' + unchanged + 'т"', function() {
-			verbEndings.forEach(ending => {
+			suffixes.forEach(ending => {
 				compareYo(unchanged + ending);
 			});
 		});
