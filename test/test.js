@@ -105,8 +105,11 @@ describe('class Typograf', function() {
 		compareYoVerb('Орё', ['об', 'раз']);
 		compareYoVerb('Плывё', ['вс', 'об', 'от', 'под']);
 		compareYoVerb('Поё', ['вос', 'от', 'под', 'рас', 'с']);
-		compareYoVerb('Стаё', ['в', 'от']);
-		doNotChangeYoInNomen('расстает'); // !!! send a verb as nomen :(
+
+		compareYoVerb('Стаё', ['в', 'вос', 'от']);
+		testYo('Расстаётся');
+		doNotChangeYoInNomen('Расстает'); // !!! send a verb as nomen :(
+		doNotChangeYoInNomen('Вырастает,Зарастает,Отрастает,Подрастает');
 
 		// MODE_NO_CAPITAL_LETTER
 		// compareYoVerb('Йдё,Ймё');
@@ -159,12 +162,8 @@ function compareYoVerb(core, prefixes = [], suffixes = []) {
 			compareYoVerb(value, prefixes, suffixes);
 		});
 	} else {
-		const showPrefixes = !!prefixes.length; // !!! comment it
-		const showSuffixes = !!suffixes.length; // !!! comment it
 		prefixes = [].concat(verbPrefixes, prefixes);
 		suffixes = [].concat(verbSuffixes, suffixes);
-		if (showPrefixes) console.log(core, prefixes); // !!! comment it
-		if (showSuffixes) console.log(core, suffixes); // !!! comment it
 		let coreWithoutYo = typograf.removeAllYo(core);
 		it(core + 'т', function() {
 			suffixes.forEach(ending => {
@@ -185,12 +184,14 @@ function compareYoVerb(core, prefixes = [], suffixes = []) {
 				});
 			});
 		});
-		let unchanged = 'вы' + coreWithoutYo.toLowerCase();
-		it('do not change "' + unchanged + 'т"', function() {
-			suffixes.forEach(ending => {
-				compareYo(unchanged + ending);
+		if ('Даё' !== core) {
+			let unchanged = 'вы' + coreWithoutYo.toLowerCase();
+			it('do not change "' + unchanged + 'т"', function() {
+				suffixes.forEach(ending => {
+					compareYo(unchanged + ending);
+				});
 			});
-		});
+		}
 	}
 }
 
