@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.16
+// @version      0.4.17
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -72,7 +72,7 @@ class Typograf {
 	improveYo(text) {
 		// verbs - list of the cores (with a capital letter and yo)
 		text = this.improveYoVerb(text, MODE_EXCEPTIONS,
-			'Льё,Мнё,Рвё');
+			'Льё,Мнё,Рвё,Трё');
 		text = this.improveYoVerb(text, MODE_EXTRA_PREFIXES,
 			'Вернё,Даё,Орё,Плывё,Поё,Стаё');
 		text = this.improveYoVerb(text, MODE_NO_CAPITAL_LETTER,
@@ -82,7 +82,7 @@ class Typograf {
 		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
 			'Шёл');
 		text = this.improveYoVerb(text, MODE_STANDARD,
-			'Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Трё,Чтё,Шлё,Шьё');
+			'Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
 
 		// verbs - fix the exceptions
 		text = this.replaceException(text, 'Расстаёт', '(?![а-дж-я])');
@@ -139,8 +139,8 @@ class Typograf {
 	}
 
 	replaceYo(text, find, replace,
-		lookBack = '(?<![б-джзй-нп-тф-я])', // +аеиоу
-		lookAhead = '(?=[мтш])'
+		lookBehind = '(?<![б-джзй-нп-тф-я])', // +аеиоу
+		lookAhead  = '(?=[мтш])'
 	) {
 		let regex;
 		let findLowerCase = find.toLowerCase();
@@ -151,7 +151,7 @@ class Typograf {
 			text = text.replace(regex, replace);
 		}
 		// 2) in lowercase = with a prefix ahead or without it
-		regex = new RegExp(lookBack + findLowerCase + lookAhead, 'gi');
+		regex = new RegExp(lookBehind + findLowerCase + lookAhead, 'gi');
 		text = text.replace(regex, replace.toLowerCase());
 		return text;
 	}
@@ -159,17 +159,17 @@ class Typograf {
 	replaceYoVerb(text, mode, find, replace) {
 		if (MODE_EXCEPTIONS === mode) {
 			return this.replaceYo(text, find, replace,
-				'(?<![б-джзй-нп-тф-я]|ко|фе)', // +аеиоу -"корвет" -"фельетон"
-				'(?=[мтш])(?!мо)'); // -"мнемо"
+				'(?<![б-джзй-нп-тф-я]|зе|ко|фе)', // +аеиоу -"зельем" -"корвет" -"фельетон"
+				'(?=[мтш])(?!мо)(?!ть)'); // -"мнемо" -"треть"
 		}
 		if (MODE_EXTRA_PREFIXES === mode) {
-			let lookBack = '(?<![гжк-нпрф-я])'; // +аеиоу +бвдзст
+			let lookBehind = '(?<![гжк-нпрф-я])'; // +аеиоу +бвдзст
 			if ('Даё' === replace) {
-				lookBack = '(?<![гжк-нпрф-ъь-я])'; // +ы
+				lookBehind = '(?<![гжк-нпрф-ъь-я])'; // +ы
 			} else if ('Стаё' === replace) {
-				lookBack = '(?<![гжк-нпрф-я]|ра)'; // -"вы/за/от/подрастает"
+				lookBehind = '(?<![гжк-нпрф-я]|ра)'; // -"вы/за/от/подрастает"
 			}
-			return this.replaceYo(text, find, replace, lookBack);
+			return this.replaceYo(text, find, replace, lookBehind);
 		}
 		if (MODE_NO_CAPITAL_LETTER === mode) {
 			return this.replaceYo(text, find.toLowerCase(), replace);
