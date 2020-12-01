@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.17
+// @version      0.4.18
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -140,7 +140,8 @@ class Typograf {
 
 	replaceYo(text, find, replace,
 		lookBehind = '(?<![б-джзй-нп-тф-я])', // +аеиоу
-		lookAhead  = '(?=[мтш])'
+		// lookAhead  = '(?=[мтш])'
+		lookAhead  = '(?=(?:м|мся|т|те|тесь|тся|шь|шься)(?:[^а-яё]|$))'
 	) {
 		let regex;
 		let findLowerCase = find.toLowerCase();
@@ -159,8 +160,8 @@ class Typograf {
 	replaceYoVerb(text, mode, find, replace) {
 		if (MODE_EXCEPTIONS === mode) {
 			return this.replaceYo(text, find, replace,
-				'(?<![б-джзй-нп-тф-я]|зе|ко|фе)', // +аеиоу -"зельем" -"корвет" -"фельетон"
-				'(?=[мтш])(?!мо)(?!ть)'); // -"мнемо" -"треть"
+				'(?<![б-джзй-нп-тф-я]|зе|ко|фе)' ); // +аеиоу -"зельем" -"корвет" -"фельетон"
+				// '(?=[мтш])(?!мо)(?!ть)'); // -"мнемо" -"треть"
 		}
 		if (MODE_EXTRA_PREFIXES === mode) {
 			let lookBehind = '(?<![гжк-нпрф-я])'; // +аеиоу +бвдзст

@@ -8,7 +8,7 @@ let Typograf = require('../tampermonkey-textarea-typograf.js').Typograf;
 let typograf = new Typograf();
 
 let verbPrefixes = ['во', 'за', 'на', 'обо', 'ото', 'пере', 'по', 'подо', 'при', 'про', 'со', 'у'];
-let verbSuffixes = ['м', 'мся', 'т', 'те', 'тесь', 'тся', 'шь'];
+let verbSuffixes = ['м', 'мся', 'т', 'те', 'тесь', 'тся', 'шь', 'шься'];
 
 describe('class Typograf', function() {
 
@@ -98,6 +98,7 @@ describe('class Typograf', function() {
 		compareYoVerb('Льё,Мнё,Рвё');
 		doNotChangeYoInNomen('Зельем,Колье,Корвет,Мнемо,Подшлемник,Портрет,Портрете,Пьезо,Рвение,'
 			+ 'Сомнение,Стремя,Трение,Треска,Треть,Фельетон,Шлем,Чтение');
+		doNotChangeYoInNomen('Вовремя,Времени,Время,Межвременье,Современник');
 
 		// MODE_EXTRA_PREFIXES
 		compareYoVerb('Вернё', ['от', 'под', 'раз', 'с']);
