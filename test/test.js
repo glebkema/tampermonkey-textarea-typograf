@@ -93,11 +93,13 @@ describe('class Typograf', function() {
 		testYo('Ещё', 'Ещё...Ещё: "Ещё" (Ещё, Ещё). Ещё');
 		testYo('Её Неё', 'Неё Её Неее. Её: "Её" (Её Неё) Длиннее Еен "Неё" Не Неё, Неё...Неё');
 
-		compareYoWord('Партнёр,Проём,Расчёт');
+		compareYoWord('Партнёр,Проём');
 		testYo('Партнёрша', 'Партнёрша, Партнёршей');
+		compareYoWord('Зачёт,Отчёт,Расчёт,Учёт');
+		testYo('Зачётка');
 
 		// MODE_STANDARD
-		compareYoVerb('Берё,Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Трё,Чтё,Шлё,Шьё');
+		compareYoVerb('Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Трё,Чтё,Шлё,Шьё');
 		testYo('Воробьём');
 
 		// MODE_EXCEPTIONS
@@ -107,6 +109,7 @@ describe('class Typograf', function() {
 		doNotChangeYoInNomen('Вовремя,Времени,Время,Межвременье,Современник');
 
 		// MODE_EXTRA_PREFIXES
+		compareYoVerb('Берё', ['от', 'под', 'раз']);
 		compareYoVerb('Вернё', ['от', 'под', 'раз', 'с']);
 		compareYoVerb('Даё', ['воз', 'вы', 'об', 'от', 'с']); // !!! вы
 		compareYoVerb('Орё', ['об', 'раз']);
