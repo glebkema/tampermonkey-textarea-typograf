@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.18
+// @version      0.4.19
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -18,6 +18,7 @@
 
 'use strict';
 
+const MODE_ENDINGS = 'endings';
 const MODE_EXCEPTIONS = 'exceptions';
 const MODE_EXTRA_PREFIXES = 'extraPrefixes';
 const MODE_NO_CAPITAL_LETTER = 'noCapitalLetter';
@@ -99,6 +100,8 @@ class Typograf {
 			'Затёк,Натёк,Потёк');
 		text = this.improveYoWord(text, null,
 			'Грёза,Грёзы,Слёзы');
+		text = this.improveYoWord(text, MODE_ENDINGS,
+			'Партнёр,Проём');
 
 		return text;
 	}
@@ -189,6 +192,11 @@ class Typograf {
 	}
 
 	replaceYoWord(text, mode, find, replace) {
+		if (MODE_ENDINGS === mode) {
+			return this.replaceYo(text, find, replace,
+				'(?<![А-Яа-яЁё])',
+				'');
+		}
 		return this.replaceYo(text, find, replace,
 			'(?<![А-Яа-яЁё])',
 			'(?![а-яё])');
