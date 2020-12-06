@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.20
+// @version      0.4.21
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -75,7 +75,7 @@ class Typograf {
 		text = this.improveYoVerb(text, MODE_EXCEPTIONS,
 			'Льё,Мнё,Рвё,Трё');
 		text = this.improveYoVerb(text, MODE_EXTRA_PREFIXES,
-			'Вернё,Даё,Орё,Плывё,Поё,Стаё');
+			'Берё,Вернё,Даё,Орё,Плывё,Поё,Стаё');
 		text = this.improveYoVerb(text, MODE_NO_CAPITAL_LETTER,
 			'Йдё,Ймё');
 		text = this.improveYoVerb(text, MODE_NO_PREFIXES,
@@ -83,7 +83,7 @@ class Typograf {
 		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
 			'Шёл');
 		text = this.improveYoVerb(text, MODE_STANDARD,
-			'Берё,Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
+			'Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
 
 		// verbs - fix the exceptions
 		text = this.replaceException(text, 'Расстаёт', '(?![а-дж-я])');
@@ -101,7 +101,9 @@ class Typograf {
 		text = this.improveYoWord(text, null,
 			'Грёза,Грёзы,Слёзы');
 		text = this.improveYoWord(text, MODE_ENDINGS,
-			'Партнёр,Проём,Расчёт');
+			'Партнёр,Проём');
+		text = this.improveYoWord(text, MODE_ENDINGS,
+			'Зачёт,Отчёт,Расчёт,Учёт');
 
 		return text;
 	}
