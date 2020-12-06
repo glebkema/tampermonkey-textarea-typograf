@@ -10,6 +10,9 @@ let typograf = new Typograf();
 let verbPrefixes = ['во', 'за', 'на', 'обо', 'ото', 'пере', 'по', 'подо', 'при', 'про', 'со', 'у'];
 let verbSuffixes = ['м', 'мся', 'т', 'те', 'тесь', 'тся', 'шь', 'шься'];
 
+let wordPrefixes = [];
+let wordEndings  = ['а', 'у', 'е', 'ом', 'ы', 'ов', 'ами', 'ах'];
+
 describe('class Typograf', function() {
 
 	context('method improveDash()', function() {
@@ -89,11 +92,12 @@ describe('class Typograf', function() {
 	context('method improveYo()', function() {
 		testYo('Ещё', 'Ещё...Ещё: "Ещё" (Ещё, Ещё). Ещё');
 		testYo('Её Неё', 'Неё Её Неее. Её: "Её" (Её Неё) Длиннее Еен "Неё" Не Неё, Неё...Неё');
-		testYo('Партнёрша', 'Партнёр, Партнёром, Партнёрша, Партнёршей');
-		testYo('Проём', 'Проём, Проёме, Проёмом');
+
+		compareYoWord('Партнёр,Проём,Расчёт');
+		testYo('Партнёрша', 'Партнёрша, Партнёршей');
 
 		// MODE_STANDARD
-		compareYoVerb('Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Трё,Чтё,Шлё,Шьё');
+		compareYoVerb('Берё,Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Трё,Чтё,Шлё,Шьё');
 		testYo('Воробьём');
 
 		// MODE_EXCEPTIONS
@@ -195,6 +199,35 @@ function compareYoVerb(core, prefixes = [], suffixes = []) {
 				});
 			});
 		}
+	}
+}
+
+function compareYoWord(core, prefixes = [], endings = []) {
+	if (core.indexOf(',') > -1) {
+		core.split(',').forEach(function(value) {
+			compareYoWord(value, prefixes, endings);
+		});
+	} else {
+		prefixes = [].concat(wordPrefixes, prefixes);
+		endings = [].concat(wordEndings, endings);
+		let coreWithoutYo = typograf.removeAllYo(core);
+		it(core, function() {
+			endings.forEach(ending => {
+				let before = coreWithoutYo.toLowerCase() + ending;
+				let after = core.toLowerCase() + ending;
+
+				// without prefix + starts with a capital letter
+				compareYo(coreWithoutYo + ending, core + ending);
+
+				// without prefix + in lowercase
+				compareYo(before, after);
+
+				// with prefixes + in lowercase
+				prefixes.forEach(prefix => {
+					compareYo(prefix + before, prefix + after);
+				});
+			});
+		});
 	}
 }
 
