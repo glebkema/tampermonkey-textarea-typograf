@@ -145,8 +145,8 @@ class Typograf {
 
 	replaceYo(text, find, replace,
 		lookBehind = '(?<![б-джзй-нп-тф-я])', // +аеиоу
-		// lookAhead  = '(?=[мтш])'
-		lookAhead  = '(?=(?:м|мся|т|те|тесь|тся|шь|шься)(?:[^а-яё]|$))'
+		// lookAhead = '(?=[мтш])'
+		lookAhead = '(?=(?:м|мся|т|те|тесь|тся|шь|шься)(?:[^а-яё]|$))'
 	) {
 		let regex;
 		let findLowerCase = find.toLowerCase();
