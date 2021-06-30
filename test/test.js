@@ -99,7 +99,7 @@ describe('class Typograf', function() {
 		testYo('Зачётка');
 
 		// MODE_STANDARD
-		compareYoVerb('Бьё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Трё,Чтё,Шлё,Шьё');
+		compareYoVerb('Бьё,Ведё,Везё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
 		testYo('Воробьём');
 
 		// MODE_EXCEPTIONS
