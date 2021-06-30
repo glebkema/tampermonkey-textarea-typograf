@@ -99,7 +99,7 @@ describe('class Typograf', function() {
 		testYo('Зачётка');
 
 		// MODE_STANDARD
-		compareYoVerb('Бьё,Ведё,Везё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
+		compareYoVerb('Бьё,Ведё,Везё,Врё,Вьё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
 		testYo('Воробьём');
 
 		// MODE_EXCEPTIONS
@@ -125,7 +125,7 @@ describe('class Typograf', function() {
 		// compareYoVerb('Йдё,Ймё');
 
 		// MODE_NO_PREFIXES
-		// compareYoVerb('Идё,Начнё,Обернё,Придё,Улыбнё');
+		// compareYoVerb('Идё,Льнё,Начнё,Обернё,Придё,Прильнё,Улыбнё');
 
 		// MODE_NO_SUFFIXES
 		// compareYoVerb('Шёл');
