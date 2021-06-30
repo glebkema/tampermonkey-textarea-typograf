@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.23
+// @version      0.4.24
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -79,11 +79,11 @@ class Typograf {
 		text = this.improveYoVerb(text, MODE_NO_CAPITAL_LETTER,
 			'Йдё,Ймё');
 		text = this.improveYoVerb(text, MODE_NO_PREFIXES,
-			'Идё,Начнё,Обернё,Придё,Улыбнё');
+			'Идё,Льнё,Начнё,Обернё,Придё,Прильнё,Улыбнё');
 		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
 			'Шёл');
 		text = this.improveYoVerb(text, MODE_STANDARD,
-			'Бьё,Ведё,Везё,Врё,Вьё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
+			'Бьё,Ведё,Везё,Врё,Вьё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
 
 		// verbs - fix the exceptions
 		text = this.replaceException(text, 'Расстаёт', '(?![а-дж-я])');
