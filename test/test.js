@@ -136,13 +136,13 @@ describe('class Typograf', function() {
 		doNotChangeVerb('Вырастает,Зарастает,Отрастает,Подрастает,Расстает');
 
 		// MODE_NO_CAPITAL_LETTER
-		// compareYoVerb('Йдё,Ймё');
+		compareYoVerb('Йдё,Ймё');
 
 		// MODE_NO_PREFIXES
-		// compareYoVerb('Идё,Льнё,Начнё,Обернё,Придё,Прильнё,Улыбнё');
+		compareYoVerb('Идё,Льнё,Начнё,Обернё,Придё,Прильнё,Улыбнё', []);
 
 		// MODE_NO_SUFFIXES
-		// compareYoVerb('Шёл');
+		compareYoVerb('Шёл', verbPrefixes, []);
 
 	});
 
@@ -212,41 +212,65 @@ function doNotChangeYoInNomen(unchanged) {
 	}
 }
 
-function compareYoVerb(core, prefixes = [], suffixes = []) {
+function compareYoVerb(core, prefixes = verbPrefixes, suffixes = verbSuffixes) {
 	if (core.indexOf(',') > -1) {
 		core.split(',').forEach(function(value) {
 			compareYoVerb(value, prefixes, suffixes);
 		});
 	} else {
-		prefixes = [].concat(verbPrefixes, prefixes);
-		suffixes = [].concat(verbSuffixes, suffixes);
 		let coreWithoutYo = typograf.removeAllYo(core);
-		it(core + 'т', function() {
-			suffixes.forEach(ending => {
-				let before = coreWithoutYo.toLowerCase() + ending;
-				let after = core.toLowerCase() + ending;
+		if (suffixes.length) {
+			it(core + 'т', function() {
+				suffixes.forEach(ending => {
+					let before = coreWithoutYo.toLowerCase() + ending;
+					let after = core.toLowerCase() + ending;
+	
+					if ('Шлё' !== core && 'м' !== ending[0]) {
+						if ('Й' !== core[0]) {
+							// without prefix + starts with a capital letter
+							compareYo(coreWithoutYo + ending, core + ending);
+						}
+	
+						// without prefix + in lowercase
+						compareYo(before, after);
+					}
+	
+					// with prefixes + in lowercase
+					prefixes.forEach(prefix => {
+						compareYo(prefix + before, prefix + after);
+					});
+				});
+			});
+			if (prefixes.length && 'Даё' !== core) {
+				let unchanged = 'вы' + coreWithoutYo.toLowerCase();
+				it('do not change "' + unchanged + 'т"', function() {
+					suffixes.forEach(ending => {
+						compareYo(unchanged + ending);
+					});
+				});
+			}
+		} else {
+			it(core, function() {
+				let before = coreWithoutYo.toLowerCase();
+				let after = core.toLowerCase();
 
-				if ('Шлё' !== core && 'м' !== ending[0]) {
-					// without prefix + starts with a capital letter
-					compareYo(coreWithoutYo + ending, core + ending);
+				// without prefix + starts with a capital letter
+				compareYo(coreWithoutYo, core);
 
-					// without prefix + in lowercase
-					compareYo(before, after);
-				}
+				// without prefix + in lowercase
+				compareYo(before, after);
 
 				// with prefixes + in lowercase
 				prefixes.forEach(prefix => {
 					compareYo(prefix + before, prefix + after);
 				});
 			});
-		});
-		if ('Даё' !== core) {
-			let unchanged = 'вы' + coreWithoutYo.toLowerCase();
-			it('do not change "' + unchanged + 'т"', function() {
-				suffixes.forEach(ending => {
-					compareYo(unchanged + ending);
+			if (prefixes.length) {
+				let unchanged = 'вы' + coreWithoutYo.toLowerCase();
+				it('do not change "' + unchanged + '"', function() {
+					compareYo(unchanged);
 				});
-			});
+			}
 		}
 	}
 }
