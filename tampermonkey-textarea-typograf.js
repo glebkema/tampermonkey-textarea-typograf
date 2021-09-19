@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.00
+// @version      0.5.01
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -93,12 +93,14 @@ class Typograf {
 		// verbs - fix the exceptions
 		text = this.replaceException(text, 'Расстаёт', '(?![а-дж-я])');
 		text = this.replaceException(text, 'Шлём');
-
+		
 		// list of the words (with a capital letter and yo)
 		text = this.improveYoWord(text, null,
 			'Её,Ещё,Моё,Неё,Своё,Твоё');
 		text = this.improveYoWord(text, null,
 			'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
+		text = this.improveYoWord(text, null,
+			'В моём,На моём,О моём'); // only with certain prepositions
 		text = this.improveYoWord(text, null,
 			'Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
 		text = this.improveYoWord(text, null,
@@ -143,6 +145,7 @@ class Typograf {
 		return text.replace(/ё/g, 'е').replace(/Ё/g, 'Е');
 	}
 
+	// restore the `e` instead of `yo`
 	replaceException(text, exception, lookAhead = '') {
 		const replace = this.removeAllYo(exception);
 		let regex = new RegExp(exception + lookAhead, 'g');
