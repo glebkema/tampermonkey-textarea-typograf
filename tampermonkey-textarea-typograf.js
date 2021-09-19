@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.4.24
+// @version      0.5.00
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -83,7 +83,12 @@ class Typograf {
 		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
 			'Шёл');
 		text = this.improveYoVerb(text, MODE_STANDARD,
-			'Бьё,Ведё,Везё,Врё,Вьё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
+			'Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
+
+		// verbs - unsystematic cases
+		let lookBehind = '(?<![б-нпру-я])'; // +аост, -ы
+		text = this.replaceYo(text, 'Дерг', 'Дёрг', lookBehind, '(?![б-яё])');    // +а, -у
+		text = this.replaceYo(text, 'Дерн', 'Дёрн', lookBehind, '(?![б-дж-нп-тф-яё])');  // +аео (сущ.), +еу (глагол)
 
 		// verbs - fix the exceptions
 		text = this.replaceException(text, 'Расстаёт', '(?![а-дж-я])');
@@ -95,15 +100,19 @@ class Typograf {
 		text = this.improveYoWord(text, null,
 			'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
 		text = this.improveYoWord(text, null,
-			'Василёк,Мотылёк,Огонёк,Пенёк,Ручеёк');
+			'Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
 		text = this.improveYoWord(text, null,
 			'Затёк,Натёк,Потёк');
 		text = this.improveYoWord(text, null,
 			'Грёза,Грёзы,Слёзы');
+		text = this.improveYoWord(text, null,
+			'Вперёд');
+		text = this.improveYoWord(text, MODE_ENDINGS,
+			'Вертолёт,Звездолёт,Налёт,Отлёт,Полёт,Пролёт,Самолёт');
 		text = this.improveYoWord(text, MODE_ENDINGS,
 			'Партнёр,Проём');
 		text = this.improveYoWord(text, MODE_ENDINGS,
-			'Зачёт,Отчёт,Расчёт,Учёт');
+			'Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Учёт');
 
 		return text;
 	}
