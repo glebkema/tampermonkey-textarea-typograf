@@ -147,7 +147,8 @@ describe('class Typograf', function() {
 	});
 
 	context('unsystematic cases', function() {
-		compareYoWord('Дёргал,Дёрнул', verbPrefixes); // NB: instead of compareYoVerb()
+		compareYoWord('Дёргал,Дёрнул', // NB: instead of compareYoVerb()
+			['за', 'на', 'об', 'от', 'пере', 'под', 'про', 'с']);
 		compareYoWord('Дёрн', [], wordEndings);
 		doNotChange('Выдернул,Дергунчик');
 	});

@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.04
+// @version      0.5.05
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -86,9 +86,9 @@ class Typograf {
 			'Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
 
 		// verbs - unsystematic cases
-		let lookBehind = '(?<![б-нпру-я])'; // +аост, -ы
+		let lookBehind = '(?<![гж-нпру-я])'; // +абвдеост, -ы
 		text = this.replaceYo(text, 'Дерг', 'Дёрг', lookBehind, '(?![б-яё])');    // +а, -у
-		text = this.replaceYo(text, 'Дерн', 'Дёрн', lookBehind, '(?![б-дж-нп-тф-яё])');  // +аео (сущ.), +еу (глагол)
+		text = this.replaceYo(text, 'Дерн', 'Дёрн', lookBehind, '(?![б-джзй-нп-тф-ъь-яё])');  // +аеиоуы (сущ. или глагол)
 
 		// verbs - fix the exceptions
 		text = this.replaceException(text, 'Раздольём');
