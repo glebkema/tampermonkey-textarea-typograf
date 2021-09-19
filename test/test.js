@@ -7,11 +7,13 @@ require('jsdom-global')();
 let Typograf = require('../tampermonkey-textarea-typograf.js').Typograf;
 let typograf = new Typograf();
 
+let adjectiveEndings = [ 'ная', 'ного', 'ное', 'ной', 'ном', 'ному', 'ную', 'ные', 'ный', 'ным', 'ными', 'ных' ];
+
 let verbPrefixes = ['во', 'за', 'на', 'обо', 'ото', 'пере', 'по', 'подо', 'при', 'про', 'со', 'у'];
 let verbSuffixes = ['м', 'мся', 'т', 'те', 'тесь', 'тся', 'шь', 'шься'];
 
 let wordPrefixes = [];
-let wordEndings  = ['а', 'у', 'е', 'ом', 'ы', 'ов', 'ами', 'ах'];
+let wordEndings  = ['а', 'у', 'е', 'ом', 'ы', 'и', 'ов', 'ам', 'ами', 'ах'];
 
 describe('class Typograf', function() {
 
@@ -93,20 +95,32 @@ describe('class Typograf', function() {
 		testYo('Ещё', 'Ещё...Ещё: "Ещё" (Ещё, Ещё). Ещё');
 		testYo('Её Неё', 'Неё Её Неее. Её: "Её" (Её Неё) Длиннее Еен "Неё" Не Неё, Неё...Неё');
 
-		compareYoWord('Партнёр,Проём');
-		testYo('Партнёрша', 'Партнёрша, Партнёршей');
-		compareYoWord('Зачёт,Отчёт,Расчёт,Учёт');
+		compareYoWord('Проём');
+		testYo('Партнёр', 'Партнёр,Партнёрский,Партнёрство');
+		testYo('Партнёрша', 'Партнёрша,Партнёршей');
+		
+		compareYoWord('Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Учёт', [], adjectiveEndings);
 		testYo('Зачётка');
+		// TODO: Зачтённый..., Учтённый... 
+
+		testYo('Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
+		testYo('Журавлём,Кораблём');
+		testYo('Копьё,Копьём');
+		testYo('Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
+		testYo('О своём деле,На твоём месте');
+		testYo('В моём случае и о моём проекте на моём экране');
+		doNotChange('Моему другу,По-моему,Но моем руки мылом');
 
 		// MODE_STANDARD
-		compareYoVerb('Бьё,Ведё,Везё,Врё,Вьё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
-		testYo('Воробьём');
+		compareYoVerb('Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
+		testYo('Воробьём,Соловьём');
 
 		// MODE_EXCEPTIONS
 		compareYoVerb('Льё,Мнё,Рвё');
-		doNotChangeYoInNomen('Зельем,Колье,Корвет,Мнемо,Подшлемник,Портрет,Портрете,Пьезо,Рвение,'
-			+ 'Сомнение,Стремя,Трение,Треска,Треть,Фельетон,Шлем,Чтение');
-		doNotChangeYoInNomen('Вовремя,Времени,Время,Межвременье,Современник');
+		doNotChange('Зельем,Колье,Мнемо,Подспорьем,Подшлемник,Похмелье,Пьезо,Раздольем,Рвение'
+			+ ',Сомнение,Стремя,Трение,Тренировка,Треска,Третировать,Треть,Чтение');
+		doNotChange('Вовремя,Времени,Время,Межвременье');
+		doNotChangeYoInNomen('Корвет,Портрет,Современник,Фельетон,Шлем');
 
 		// MODE_EXTRA_PREFIXES
 		compareYoVerb('Берё', ['от', 'под', 'раз']);
@@ -118,8 +132,8 @@ describe('class Typograf', function() {
 
 		compareYoVerb('Стаё', ['в', 'вос', 'от']);
 		testYo('Расстаётся');
-		doNotChangeYoInNomen('Расстает'); // !!! send a verb as nomen :(
-		doNotChangeYoInNomen('Вырастает,Зарастает,Отрастает,Подрастает');
+		doNotChange('Снег расстает в мае,Тает стаей город во мгле');
+		doNotChangeVerb('Вырастает,Зарастает,Отрастает,Подрастает,Расстает');
 
 		// MODE_NO_CAPITAL_LETTER
 		// compareYoVerb('Йдё,Ймё');
@@ -130,6 +144,13 @@ describe('class Typograf', function() {
 		// MODE_NO_SUFFIXES
 		// compareYoVerb('Шёл');
 
+	});
+
+	context('unsystematic cases', function() {
+		compareYoWord('Дёргал,Дёрнул', // NB: instead of compareYoVerb()
+			['за', 'на', 'об', 'от', 'пере', 'под', 'про', 'с']);
+		compareYoWord('Дёрн', [], wordEndings);
+		doNotChange('Выдернул,Дергунчик');
 	});
 
 	context('element', function() {
@@ -143,15 +164,38 @@ describe('class Typograf', function() {
 
 });
 
+// NB: this function should be called from within the it() function
+// NB: pass only one parameter if its value should not be changed
+function compareYo(before, after = null) {
+	after = after || before;
+	assert.equal(typograf.improveYo(before), after);
+}
+
+function doNotChange(unchanged) {
+	if (unchanged.indexOf(',') > -1) {
+		unchanged.split(',').forEach(doNotChange);
+	} else {
+		it('do not change "' + unchanged + '"', function() {
+			compareYo(unchanged);
+		});
+	}
+}
+
+function doNotChangeVerb(unchanged) {
+	if (unchanged.indexOf(',') > -1) {
+		unchanged.split(',').forEach(doNotChangeVerb);
+	} else {
+		it('do not change "' + unchanged + '"', function() {
+			compareYo(unchanged);
+			compareYo(unchanged + 'е');
+		});
+	}
+}
+
 function doNotChangeDash(description, unchanged) {
 	it('do not change ' + description, function() {
 		assert.equal(typograf.improveDash(unchanged), unchanged);
 	});
-}
-
-function compareYo(before, after = null) {  // one paramter = has not be changed
-	after = after || before;
-	assert.equal(typograf.improveYo(before), after);
 }
 
 function doNotChangeYoInNomen(unchanged) {
@@ -161,7 +205,9 @@ function doNotChangeYoInNomen(unchanged) {
 		it('do not change "' + unchanged + '"', function() {
 			compareYo(unchanged);
 			compareYo(unchanged.toLowerCase());
-			compareYo(unchanged.toLowerCase() + 'е');
+			wordEndings.forEach(ending => {
+				compareYo(unchanged + ending);
+			});
 		});
 	}
 }

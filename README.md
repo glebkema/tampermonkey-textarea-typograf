@@ -11,8 +11,14 @@ Tested only for Chrome: [Tampermonkey](https://chrome.google.com/webstore/detail
 Incompatible with Safari and IE11 due to the use of [lookbehind in JS regular expressions](https://caniuse.com/js-regexp-lookbehind).
 
 
-## Run tests
+## Testing my Mocha
 
+[Install](https://mochajs.org/#installation):
+```
+$ npm install --global mocha
+```
+
+Run:
 ```
 mocha test
 ```
