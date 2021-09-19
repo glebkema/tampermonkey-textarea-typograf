@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.02
+// @version      0.5.03
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -103,6 +103,8 @@ class Typograf {
 			'В моём,На моём,О моём'); // only with certain prepositions
 		text = this.improveYoWord(text, null,
 			'Журавлём,Кораблём');
+		text = this.improveYoWord(text, null,
+			'Копьё,Копьём');
 		text = this.improveYoWord(text, null,
 			'Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
 		text = this.improveYoWord(text, null,
