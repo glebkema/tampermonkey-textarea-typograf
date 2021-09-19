@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.03
+// @version      0.5.04
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -91,6 +91,7 @@ class Typograf {
 		text = this.replaceYo(text, 'Дерн', 'Дёрн', lookBehind, '(?![б-дж-нп-тф-яё])');  // +аео (сущ.), +еу (глагол)
 
 		// verbs - fix the exceptions
+		text = this.replaceException(text, 'Раздольём');
 		text = this.replaceException(text, 'Расстаёт', '(?![а-дж-я])');
 		text = this.replaceException(text, 'Шлём');
 		
