@@ -99,7 +99,7 @@ describe('class Typograf', function() {
 		testYo('Партнёр', 'Партнёр,Партнёрский,Партнёрство');
 		testYo('Партнёрша', 'Партнёрша,Партнёршей');
 		
-		compareYoWord('Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Учёт', [], adjectiveEndings);
+		compareYoWord('Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Счёт,Учёт', [], adjectiveEndings);
 		testYo('Зачётка');
 		// TODO: Зачтённый..., Учтённый... 
 
