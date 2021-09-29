@@ -103,6 +103,9 @@ describe('class Typograf', function() {
 		testYo('Зачётка');
 		// TODO: Зачтённый..., Учтённый... 
 
+		compareYoWord('Расчёск');
+		compareYoWord('Чётк', [], adjectiveEndings);
+
 		testYo('Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
 		testYo('Журавлём,Кораблём');
 		testYo('Копьё,Копьём');
