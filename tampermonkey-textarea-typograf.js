@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.07
+// @version      0.5.08
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -116,13 +116,17 @@ class Typograf {
 			'Вперёд');
 		text = this.improveYoWord(text, null,
 			'Трёх,Четырёх');
+		text = this.improveYoWord(text, null,
+			'Насчёт');
 		text = this.improveYoWord(text, MODE_ENDINGS,
 			'Вертолёт,Звездолёт,Налёт,Отлёт,Полёт,Пролёт,Самолёт');
 		text = this.improveYoWord(text, MODE_ENDINGS,
 			'Партнёр,Проём');
 		text = this.improveYoWord(text, MODE_ENDINGS,
 			'Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Счёт,Учёт');
-	
+		text = this.improveYoWord(text, MODE_ENDINGS,
+			'Расчёск,Чётк');
+		
 		return text;
 	}
 

@@ -1,6 +1,6 @@
 {
   "name": "tampermonkey-textarea-typograf",
-  "version": "0.4.0",
+  "version": "0.5.08",
   "description": "Replaces hyphens and quotation marks. Works only in the <textarea>.",
   "main": "tampermonkey-textarea-typograf.js",
   "scripts": {
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/glebkema/tampermonkey-textarea-typograf#readme",
   "devDependencies": {
+    "ansi-regex": ">=5.0.1",
     "chai": "^4.2.0",
     "eslint": "^7.11.0",
     "eslint-config-airbnb-base": "^14.2.0",
