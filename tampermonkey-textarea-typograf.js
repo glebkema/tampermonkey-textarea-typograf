@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.08
+// @version      0.5.09
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -103,9 +103,11 @@ class Typograf {
 		text = this.improveYoWord(text, null,
 			'В моём,На моём,О моём'); // only with certain prepositions
 		text = this.improveYoWord(text, null,
-			'Журавлём,Кораблём');
+			'Журавлём,Кораблём,Королём,Снегирём,Соловьём');
 		text = this.improveYoWord(text, null,
 			'Копьё,Копьём');
+		text = this.improveYoWord(text, null,
+			'Трёх,Четырём,Четырёх');  // "Трём" уже есть как глагол
 		text = this.improveYoWord(text, null,
 			'Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
 		text = this.improveYoWord(text, null,
@@ -114,8 +116,6 @@ class Typograf {
 			'Грёза,Грёзы,Слёзы');
 		text = this.improveYoWord(text, null,
 			'Вперёд');
-		text = this.improveYoWord(text, null,
-			'Трёх,Четырёх');
 		text = this.improveYoWord(text, null,
 			'Насчёт');
 		text = this.improveYoWord(text, MODE_ENDINGS,
