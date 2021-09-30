@@ -15,6 +15,8 @@ let verbSuffixes = ['м', 'мся', 'т', 'те', 'тесь', 'тся', 'шь', 
 let wordPrefixes = [];
 let wordEndings  = ['а', 'у', 'е', 'ом', 'ы', 'и', 'ов', 'ам', 'ами', 'ах'];
 
+let numberEndings = ['ём', 'ёх'];
+
 describe('class Typograf', function() {
 
 	context('method improveDash()', function() {
@@ -105,6 +107,7 @@ describe('class Typograf', function() {
 
 		compareYoWord('Расчёск');
 		compareYoWord('Чётк', [], adjectiveEndings);
+		compareYoWord('Тр,Четыр', [], numberEndings);
 
 		testYo('Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
 		testYo('Журавлём,Кораблём');
@@ -113,6 +116,8 @@ describe('class Typograf', function() {
 		testYo('О своём деле,На твоём месте');
 		testYo('В моём случае и о моём проекте на моём экране');
 		doNotChange('Моему другу,По-моему,Но моем руки мылом');
+
+		testYo('-варём', 'Букварём,Главарём,Словарём');
 
 		// MODE_STANDARD
 		compareYoVerb('Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
@@ -289,11 +294,13 @@ function compareYoWord(core, prefixes = [], endings = []) {
 		let coreWithoutYo = typograf.removeAllYo(core);
 		it(core, function() {
 			endings.forEach(ending => {
-				let before = coreWithoutYo.toLowerCase() + ending;
+				let endingWithoutYo = typograf.removeAllYo(ending);
+
+				let before = coreWithoutYo.toLowerCase() + endingWithoutYo;
 				let after = core.toLowerCase() + ending;
 
 				// without prefix + starts with a capital letter
-				compareYo(coreWithoutYo + ending, core + ending);
+				compareYo(coreWithoutYo + endingWithoutYo, core + ending);
 
 				// without prefix + in lowercase
 				compareYo(before, after);
