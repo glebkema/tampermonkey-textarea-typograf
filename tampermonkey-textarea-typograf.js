@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.09
+// @version      0.5.10
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -18,7 +18,8 @@
 
 'use strict';
 
-const MODE_ENDINGS = 'endings';
+const MODE_ANY_BEGINNING = 'anyBeginning';
+const MODE_ANY_ENDING = 'anyEnding';
 const MODE_EXCEPTIONS = 'exceptions';
 const MODE_EXTRA_PREFIXES = 'extraPrefixes';
 const MODE_NO_CAPITAL_LETTER = 'noCapitalLetter';
@@ -118,13 +119,15 @@ class Typograf {
 			'Вперёд');
 		text = this.improveYoWord(text, null,
 			'Насчёт');
-		text = this.improveYoWord(text, MODE_ENDINGS,
+		text = this.improveYoWord(text, MODE_ANY_BEGINNING,
+			'варём');
+		text = this.improveYoWord(text, MODE_ANY_ENDING,
 			'Вертолёт,Звездолёт,Налёт,Отлёт,Полёт,Пролёт,Самолёт');
-		text = this.improveYoWord(text, MODE_ENDINGS,
+		text = this.improveYoWord(text, MODE_ANY_ENDING,
 			'Партнёр,Проём');
-		text = this.improveYoWord(text, MODE_ENDINGS,
+		text = this.improveYoWord(text, MODE_ANY_ENDING,
 			'Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Счёт,Учёт');
-		text = this.improveYoWord(text, MODE_ENDINGS,
+		text = this.improveYoWord(text, MODE_ANY_ENDING,
 			'Расчёск,Чётк');
 		
 		return text;
@@ -217,7 +220,12 @@ class Typograf {
 	}
 
 	replaceYoWord(text, mode, find, replace) {
-		if (MODE_ENDINGS === mode) {
+		if (MODE_ANY_BEGINNING === mode) {
+			return this.replaceYo(text, find, replace,
+				'',
+				'(?![а-яё])');
+		}
+		if (MODE_ANY_ENDING === mode) {
 			return this.replaceYo(text, find, replace,
 				'(?<![А-Яа-яЁё])',
 				'');
