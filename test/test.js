@@ -100,10 +100,13 @@ describe('class Typograf', function() {
 		compareYoWord('Проём');
 		testYo('Партнёр', 'Партнёр,Партнёрский,Партнёрство');
 		testYo('Партнёрша', 'Партнёрша,Партнёршей');
-		
+
 		compareYoWord('Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Счёт,Учёт', [], adjectiveEndings);
 		testYo('Зачётка');
-		// TODO: Зачтённый..., Учтённый... 
+		// TODO: Зачтённый..., Учтённый...
+
+		compareYoWord('Вёрстк');
+		doNotChange('За версту,Сверстать');
 
 		compareYoWord('Расчёск');
 		compareYoWord('Чётк', [], adjectiveEndings);
@@ -113,6 +116,7 @@ describe('class Typograf', function() {
 		testYo('Журавлём,Кораблём');
 		testYo('Копьё,Копьём');
 		testYo('Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
+
 		testYo('О своём деле,На твоём месте');
 		testYo('В моём случае и о моём проекте на моём экране');
 		doNotChange('Моему другу,По-моему,Но моем руки мылом');
@@ -232,17 +236,17 @@ function compareYoVerb(core, prefixes = verbPrefixes, suffixes = verbSuffixes) {
 				suffixes.forEach(ending => {
 					let before = coreWithoutYo.toLowerCase() + ending;
 					let after = core.toLowerCase() + ending;
-	
+
 					if ('Шлё' !== core && 'м' !== ending[0]) {
 						if ('Й' !== core[0]) {
 							// without prefix + starts with a capital letter
 							compareYo(coreWithoutYo + ending, core + ending);
 						}
-	
+
 						// without prefix + in lowercase
 						compareYo(before, after);
 					}
-	
+
 					// with prefixes + in lowercase
 					prefixes.forEach(prefix => {
 						compareYo(prefix + before, prefix + after);
