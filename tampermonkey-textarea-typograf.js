@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.10
+// @version      0.5.11
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -95,7 +95,7 @@ class Typograf {
 		text = this.replaceException(text, 'Раздольём');
 		text = this.replaceException(text, 'Расстаёт', '(?![а-дж-я])');
 		text = this.replaceException(text, 'Шлём');
-		
+
 		// list of the words (with a capital letter and yo)
 		text = this.improveYoWord(text, null,
 			'Её,Ещё,Моё,Неё,Своё,Твоё');
@@ -128,8 +128,8 @@ class Typograf {
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
 			'Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Счёт,Учёт');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Расчёск,Чётк');
-		
+			'Вёрстк,Расчёск,Чётк');
+
 		return text;
 	}
 
