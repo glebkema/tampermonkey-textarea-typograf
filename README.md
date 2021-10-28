@@ -1,6 +1,6 @@
 # Tampermonkey Textarea Typograf
 
-+ Replaces hyphens, quotation marks and some uncanonic smiles.
++ Replaces hyphens, nested quotation marks and some uncanonic smiles.
 + Place the letter "yo" in some russian words.
 
 Works only in the `<textarea>` fields.
@@ -11,7 +11,7 @@ Tested only for Chrome: [Tampermonkey](https://chrome.google.com/webstore/detail
 Incompatible with Safari and IE11 due to the use of [lookbehind in JS regular expressions](https://caniuse.com/js-regexp-lookbehind).
 
 
-## Testing my Mocha
+## Testing by Mocha
 
 [Install](https://mochajs.org/#installation):
 ```
