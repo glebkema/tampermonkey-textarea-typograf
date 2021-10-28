@@ -142,6 +142,9 @@ describe('class Typograf', function() {
 		compareYoVerb('Плывё', ['вс', 'об', 'от', 'под']);
 		compareYoVerb('Поё', ['вос', 'от', 'под', 'рас', 'с']);
 
+		compareYoVerb('Живё,Несё,Плывё', ['за', 'на', 'об', 'от', 'пере', 'по', 'под', 'при', 'про', 'с', 'у']);
+		compareYoVerb('Ревё,Смеё', ['за', 'об', 'от', 'пере', 'по', 'про']);
+
 		compareYoVerb('Стаё', ['в', 'вос', 'от']);
 		testYo('Расстаётся');
 		doNotChange('Снег расстает в мае,Тает стаей город во мгле');
@@ -151,7 +154,8 @@ describe('class Typograf', function() {
 		compareYoVerb('Йдё,Ймё');
 
 		// MODE_NO_PREFIXES
-		compareYoVerb('Идё,Льнё,Начнё,Обернё,Придё,Прильнё,Улыбнё', []);
+		compareYoVerb('Идё,Начнё,Обернё,Придё,Улыбнё', []);
+		compareYoVerb('Льнё,Прильнё', []);
 
 		// MODE_NO_SUFFIXES
 		compareYoVerb('Шёл', verbPrefixes, []);
