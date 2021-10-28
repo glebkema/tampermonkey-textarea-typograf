@@ -38,7 +38,7 @@ describe('class Typograf', function() {
 		testQuotes('in spaces', ' "a" ', ' «a» ');
 		testQuotes('in curles', '("a")', '(«a»)');
 
-		let marks = ['.', ',', ';', '!', '?'];
+		let marks = ['.', '!', '?'];  // , ',', ';'
 		for (let i = 0; i < marks.length; i++) {
 			let mark = marks[i];
 			testQuotes('near ' + mark + ' 1', 'a"' + mark,    'a»' + mark);
@@ -60,6 +60,11 @@ describe('class Typograf', function() {
 		testQuotes('Привет,', '"Привет", - вот и "всё".', '«Привет», - вот и «всё».');
 		testQuotes('Ой!', '("Ой!")', '(«Ой!»)');
 		testQuotes('23 примера', '- "23 примера"', '- «23 примера»');
+
+		testQuotes('Nested quotes', 'Точнее, "даже "вложенные кавычки" нужно "заменять""', 'Точнее, «даже „вложенные кавычки“ нужно „заменять“»');
+		testQuotes('Wrong quotes',  'Точнее, “даже "вложенные кавычки" нужно «заменять»„', 'Точнее, «даже „вложенные кавычки“ нужно „заменять“»');
+		testQuotes('Wrong quotes',  'Точнее, ""даже вложенные кавычки" нужно "заменять"", но "аккуратно" и "по "делу""',
+									'Точнее, «„даже вложенные кавычки“ нужно „заменять“», но «аккуратно» и «по „делу“»');
 	});
 
 	context('method improveSmile()', function() {

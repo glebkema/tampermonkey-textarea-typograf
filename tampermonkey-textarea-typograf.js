@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020, glebkema (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.12
+// @version      0.5.13
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -61,8 +61,25 @@ class Typograf {
 	}
 
 	improveQuotes(text) {
-		text = text.replace(/(?<=^|[(\s])"/g, '«');
-		text = text.replace(/"(?=$|[.,;:!?)\s])/g, '»');
+		// use only one type + only external if two stand together
+		// text = text.replace(/(?<=^|[(\s])["„“]/g, '«');
+		// text = text.replace(/["„“](?=$|[.,;:!?)\s])/g, '»');
+
+		// use only one type
+		text = text.replace(/["„“](?=["„“«]*[\wа-яё(])/gi, '«');
+		text = text.replace(/(?<=[\wа-яё).!?]["„“»]*)["„“]/gi, '»');
+
+		// nested quotes
+		// (?:«[^»]*)([«"])([^"»]*)(["»])
+		// (?=(?:(?<!\w)["«](\w.*?)["»](?!\w)))   https://stackoverflow.com/a/39706568/6263942
+		// («([^«»]|(?R))*»)                      https://stackoverflow.com/a/14952740/6263942
+		// «((?>[^«»]+|(?R))*)»                   https://stackoverflow.com/a/26386070/6263942
+		// «([^«»]*+(?:(?R)[^«»]*)*+)»            https://stackoverflow.com/a/26386070/6263942
+		// «[^»]*(?:(«)[^«»]*+(»)[^«]*)+»
+		do {
+			var old = text;
+			text = text.replace(/(?<=«[^»]*)«(.*?)»/g, '„$1“');
+		} while ( old !== text );
 		return text;
 	}
 
