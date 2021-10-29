@@ -22,3 +22,10 @@ Run:
 ```
 mocha test
 ```
+
+Check the efficiency of the algorithm on the words with the letter "yo" collected by the project http://python.anabar.ru/yo.htm
+```
+mocha test/test-yobase.js
+```
+
+Result on 2021.10.29: 4325 of 58138 words = 7.44 %
