@@ -14,13 +14,34 @@ for (let i = 0; i < wordsCount; i++) {
 		successCount++;
 	}
 	if (i > 0 && 0 === i % 5000) {
-		console.log(getYobaseStatistic( i, successCount));
+		consoleStatisticsIntermediate(i, successCount);
 	}
 }
-console.log('Result', getYobaseStatistic( wordsCount, successCount));
+consoleStatisticsFinal(wordsCount, successCount);
 
-function getYobaseStatistic( i, successCount ) {
-	return ('' + successCount).padStart(5, ' ') + ' / ' + ('' + i).padStart(5, ' ') + ' = ' + ( Math.round( successCount * 10000 / i ) / 100 ) + ' %';
+function consoleStatisticsFinal(wordsCount, successCount) {
+	console.log(
+		'On',
+		new Date().toISOString().slice(0, 10),
+		'the script corrected',
+		successCount,
+		'words out of',
+		wordsCount,
+		getSuccessProcent(wordsCount, successCount)
+	);
+}
+
+function consoleStatisticsIntermediate(i, successCount) {
+	console.log(
+		('' + successCount).padStart(5, ' '),
+		'/',
+		('' + i).padStart(5, ' '),
+		getSuccessProcent(wordsCount, successCount)
+	);
+}
+
+function getSuccessProcent(i, successCount) {
+	return '= ' + (Math.round(successCount * 10000 / i) / 100) + ' %';
 }
 
 // "yobase" from http://python.anabar.ru/yo.htm

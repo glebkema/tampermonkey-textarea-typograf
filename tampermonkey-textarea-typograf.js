@@ -3,9 +3,9 @@
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
 // @description  Replaces hyphens, quotation marks, uncanonic smiles and "yo" in some russian words.
 // @author       glebkema
-// @copyright    2020, glebkema (https://github.com/glebkema)
+// @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.15
+// @version      0.5.16
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
