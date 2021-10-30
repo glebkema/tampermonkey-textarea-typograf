@@ -3,9 +3,9 @@
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
 // @description  Replaces hyphens, quotation marks, uncanonic smiles and "yo" in some russian words.
 // @author       glebkema
-// @copyright    2020, glebkema (https://github.com/glebkema)
+// @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.14
+// @version      0.5.16
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -18,6 +18,7 @@
 
 'use strict';
 
+const MODE_ANY = 'any';
 const MODE_ANY_BEGINNING = 'anyBeginning';
 const MODE_ANY_ENDING = 'anyEnding';
 const MODE_EXCEPTIONS = 'exceptions';
@@ -119,7 +120,7 @@ class Typograf {
 		text = this.improveYoWord(text, null,
 			'Её,Ещё,Моё,Неё,Своё,Твоё');
 		text = this.improveYoWord(text, null,
-			'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Огнём,Своём,Твоём');
+			'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Своём,Твоём');
 		text = this.improveYoWord(text, null,
 			'В моём,На моём,О моём'); // only with certain prepositions
 		text = this.improveYoWord(text, null,
@@ -138,8 +139,12 @@ class Typograf {
 			'Вперёд');
 		text = this.improveYoWord(text, null,
 			'Насчёт');
+		text = this.improveYoWord(text, MODE_ANY,
+			'Съёмк');
 		text = this.improveYoWord(text, MODE_ANY_BEGINNING,
 			'варём');
+		text = this.improveYoWord(text, MODE_ANY_ENDING,
+			'Актёр,Алён,Алёх,Алёш,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
 			'Вертолёт,Звездолёт,Налёт,Отлёт,Полёт,Пролёт,Самолёт');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
@@ -239,6 +244,11 @@ class Typograf {
 	}
 
 	replaceYoWord(text, mode, find, replace) {
+		if (MODE_ANY === mode) {
+			return this.replaceYo(text, find, replace,
+				'',
+				'(?=[а-я])');
+		}
 		if (MODE_ANY_BEGINNING === mode) {
 			return this.replaceYo(text, find, replace,
 				'',
