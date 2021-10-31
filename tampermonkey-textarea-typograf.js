@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.19
+// @version      0.5.20
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -224,7 +224,7 @@ class Typograf {
 			text = text.replace(regex, replace);
 		}
 		// 2) in lowercase = with a prefix ahead or without it
-		regex = new RegExp(lookBehind + findLowerCase + lookAhead, 'gi');
+		regex = new RegExp(lookBehind + findLowerCase + lookAhead, 'g' + ('' === lookBehind ? '' : 'i'));
 		text = text.replace(regex, replace.toLowerCase());
 		return text;
 	}
