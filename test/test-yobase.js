@@ -36,7 +36,7 @@ function consoleStatisticsIntermediate(i, successCount) {
 		('' + successCount).padStart(5, ' '),
 		'/',
 		('' + i).padStart(5, ' '),
-		getSuccessProcent(wordsCount, successCount)
+		getSuccessProcent(i, successCount)
 	);
 }
 

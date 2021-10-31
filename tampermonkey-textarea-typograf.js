@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.16
+// @version      0.5.20
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -102,9 +102,11 @@ class Typograf {
 		text = this.improveYoVerb(text, MODE_NO_PREFIXES,
 			'Льнё,Прильнё');
 		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
+			'берёг,Берёгся');
+		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
 			'Шёл');
 		text = this.improveYoVerb(text, MODE_STANDARD,
-			'Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
+			'Бережё,Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
 
 		// verbs - unsystematic cases
 		let lookBehind = '(?<![гж-нпру-я])'; // +абвдеост, -ы
@@ -136,38 +138,53 @@ class Typograf {
 		text = this.improveYoWord(text, null,
 			'Грёза,Грёзы,Слёзы');
 		text = this.improveYoWord(text, null,
+			'Бёдер,Белёк');
+		text = this.improveYoWord(text, null,
+			'Бельё,Бельём');
+		text = this.improveYoWord(text, null,
 			'Вперёд');
 		text = this.improveYoWord(text, null,
-			'Насчёт');
+			'Всё, на чём/Всё, о чём/Всё, про что/Всё, с чем/Всё, что',
+			'/');
 		text = this.improveYoWord(text, MODE_ANY,
-			'Съёмк');
+			'Веретён,Гнёзд,Звёздн,Лёгочн,Лётчи,Надёжн,Налёт,Съёмк,Шёрстн');
+		text = this.improveYoWord(text, MODE_ANY,
+			'гиллёз,надёг,ощёк,скажён,стёгивал,стёгнут,счётн,уёмн,циллёз,ъёмкост');
 		text = this.improveYoWord(text, MODE_ANY_BEGINNING,
 			'варём');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Актёр,Алён,Алёх,Алёш,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём');
+			'Актёр,Алён,Алёх,Алёш,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём,Бабёнк,Балдёж,Банкомёт,Бёдра,Белёх,Белёш,Бельёвщиц,Бережён,Берёз,Бесён,Бесслёзн,Лёгки');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Вертолёт,Звездолёт,Налёт,Отлёт,Полёт,Пролёт,Самолёт');
+			'Бабёф,Балансёр,Баталёр');
+		text = this.improveYoWord(text, MODE_ANY_ENDING,
+			'Вертолёт,Звездолёт,Отлёт,Полёт,Пролёт,Самолёт');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
 			'Партнёр,Проём');
+
+		text = this.improveYoWord(text, null,
+			'Насчёт');
+		text = this.improveYoWord(text, MODE_ANY,
+			'Отчёт,Расчёт');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Счёт,Учёт');
+			'Зачёт,Звездочёт,Почёт,Счёт,Учёт');
+
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
 			'Вёрстк,Расчёск,Чётк');
 
 		return text;
 	}
 
-	improveYoVerb(text, mode, list) {
-		return this.iterator(text, mode, list, this.replaceYoVerb.bind(this));
+	improveYoVerb(text, mode, list, divider = ',') {
+		return this.iterator(text, mode, list, divider, this.replaceYoVerb.bind(this));
 	}
 
-	improveYoWord(text, mode, list) {
-		return this.iterator(text, mode, list, this.replaceYoWord.bind(this));
+	improveYoWord(text, mode, list, divider = ',') {
+		return this.iterator(text, mode, list, divider, this.replaceYoWord.bind(this));
 	}
 
-	iterator(text, mode, list, callback) {
+	iterator(text, mode, list, divider, callback) {
 		if ('string' === typeof list) {
-			list = list.split(',');
+			list = list.split(divider);
 		}
 		for (let i = 0; i < list.length; i++) {
 			const replace = list[i].trim();
@@ -207,7 +224,7 @@ class Typograf {
 			text = text.replace(regex, replace);
 		}
 		// 2) in lowercase = with a prefix ahead or without it
-		regex = new RegExp(lookBehind + findLowerCase + lookAhead, 'gi');
+		regex = new RegExp(lookBehind + findLowerCase + lookAhead, 'g' + ('' === lookBehind ? '' : 'i'));
 		text = text.replace(regex, replace.toLowerCase());
 		return text;
 	}
@@ -236,7 +253,7 @@ class Typograf {
 		}
 		if (MODE_NO_SUFFIXES === mode) {
 			return this.replaceYo(text, find, replace,
-				'(?<![б-джзй-нп-тф-я])', // +аеиоу
+				'(?<![б-джзй-нпртф-я])', // +аеиоу +с
 				'(?![а-яё])');
 		}
 		// MODE_STANDARD
@@ -247,7 +264,7 @@ class Typograf {
 		if (MODE_ANY === mode) {
 			return this.replaceYo(text, find, replace,
 				'',
-				'(?=[а-я])');
+				'');
 		}
 		if (MODE_ANY_BEGINNING === mode) {
 			return this.replaceYo(text, find, replace,
