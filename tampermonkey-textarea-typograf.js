@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.17
+// @version      0.5.18
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -102,6 +102,8 @@ class Typograf {
 		text = this.improveYoVerb(text, MODE_NO_PREFIXES,
 			'Льнё,Прильнё');
 		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
+			'берёг,Берёгся');
+		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
 			'Шёл');
 		text = this.improveYoVerb(text, MODE_STANDARD,
 			'Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
@@ -136,24 +138,32 @@ class Typograf {
 		text = this.improveYoWord(text, null,
 			'Грёза,Грёзы,Слёзы');
 		text = this.improveYoWord(text, null,
+			'Бёдер,Белёк');
+		text = this.improveYoWord(text, null,
+			'Бельё,Бельём');
+		text = this.improveYoWord(text, null,
 			'Вперёд');
 		text = this.improveYoWord(text, null,
-			'Насчёт');
+			'Насчёт,Отчёт,Расчёт');
 		text = this.improveYoWord(text, null,
 			'Всё, на чём/Всё, о чём/Всё, про что/Всё, с чем/Всё, что',
 			'/');
 		text = this.improveYoWord(text, MODE_ANY,
-			'Съёмк');
+			'Веретён,Гнёзд,Звёздн,Лёгочн,Лётчи,Надёжн,Налёт,Съёмк,Шёрстн');
+		text = this.improveYoWord(text, MODE_ANY,
+			'гиллёз,надёг,ощёк,скажён,уёмн,циллёз,ъёмкост');
 		text = this.improveYoWord(text, MODE_ANY_BEGINNING,
 			'варём');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Актёр,Алён,Алёх,Алёш,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём');
+			'Актёр,Алён,Алёх,Алёш,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём,Бабёнк,Балдёж,Банкомёт,Бёдра,Белёх,Белёш,Бельёвщиц,Лёгки');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Вертолёт,Звездолёт,Налёт,Отлёт,Полёт,Пролёт,Самолёт');
+			'Бабёф,Балансёр,Баталёр');
+		text = this.improveYoWord(text, MODE_ANY_ENDING,
+			'Вертолёт,Звездолёт,Отлёт,Полёт,Пролёт,Самолёт');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
 			'Партнёр,Проём');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Счёт,Учёт');
+			'Зачёт,Звездочёт,Почёт,Счёт,Учёт');
 		text = this.improveYoWord(text, MODE_ANY_ENDING,
 			'Вёрстк,Расчёск,Чётк');
 
@@ -250,7 +260,7 @@ class Typograf {
 		if (MODE_ANY === mode) {
 			return this.replaceYo(text, find, replace,
 				'',
-				'(?=[а-я])');
+				'');
 		}
 		if (MODE_ANY_BEGINNING === mode) {
 			return this.replaceYo(text, find, replace,
