@@ -140,6 +140,7 @@ describe('class Typograf', function() {
 		doNotChange('Все, кто. Все, чтобы. На овсе, про что.', false);
 
 		testYo('Берёгся,Приберёг,Сберёг,Уберёгся');
+		testYo('Бессчётная');
 		testYo('Пристёгивал,Подстёгивали,Отстёгнутый');
 
 		// MODE_STANDARD
