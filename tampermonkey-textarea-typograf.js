@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.16
+// @version      0.5.17
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -139,6 +139,9 @@ class Typograf {
 			'Вперёд');
 		text = this.improveYoWord(text, null,
 			'Насчёт');
+		text = this.improveYoWord(text, null,
+			'Всё, на чём/Всё, о чём/Всё, про что/Всё, с чем/Всё, что',
+			'/');
 		text = this.improveYoWord(text, MODE_ANY,
 			'Съёмк');
 		text = this.improveYoWord(text, MODE_ANY_BEGINNING,
@@ -157,17 +160,17 @@ class Typograf {
 		return text;
 	}
 
-	improveYoVerb(text, mode, list) {
-		return this.iterator(text, mode, list, this.replaceYoVerb.bind(this));
+	improveYoVerb(text, mode, list, divider = ',') {
+		return this.iterator(text, mode, list, divider, this.replaceYoVerb.bind(this));
 	}
 
-	improveYoWord(text, mode, list) {
-		return this.iterator(text, mode, list, this.replaceYoWord.bind(this));
+	improveYoWord(text, mode, list, divider = ',') {
+		return this.iterator(text, mode, list, divider, this.replaceYoWord.bind(this));
 	}
 
-	iterator(text, mode, list, callback) {
+	iterator(text, mode, list, divider, callback) {
 		if ('string' === typeof list) {
-			list = list.split(',');
+			list = list.split(divider);
 		}
 		for (let i = 0; i < list.length; i++) {
 			const replace = list[i].trim();

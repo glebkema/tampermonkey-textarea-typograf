@@ -132,6 +132,9 @@ describe('class Typograf', function() {
 
 		testYo('Огнём,Артогнём');  // by improveYoVerb('Гнё')
 
+		testYo('Всё, на чём. Всё, о чём. Всё, про что. Всё, с чем. Всё, что.');
+		doNotChange('Все, кто. Все, чтобы. На овсе, про что.', false);
+
 		// MODE_STANDARD
 		compareYoVerb('Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
 		testYo('Воробьём,Соловьём');
@@ -196,8 +199,8 @@ function compareYo(before, after = null) {
 	assert.equal(typograf.improveYo(before), after);
 }
 
-function doNotChange(unchanged) {
-	if (unchanged.indexOf(',') > -1) {
+function doNotChange(unchanged, split = true) {
+	if (split && unchanged.indexOf(',') > -1) {
 		unchanged.split(',').forEach(doNotChange);
 	} else {
 		it('do not change "' + unchanged + '"', function() {
