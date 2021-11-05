@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.5.22
+// @version      0.6.0
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -18,18 +18,61 @@
 
 'use strict';
 
-const MODE_ANY = 'any';
-const MODE_ANY_BEGINNING = 'anyBeginning';
-const MODE_ANY_ENDING = 'anyEnding';
-const MODE_ANY_ENDING_AFTER_KH_OR_SH = 'anyEndingAfterKhOrSh';
-const MODE_EXCEPTIONS = 'exceptions';
-const MODE_EXTRA_PREFIXES = 'extraPrefixes';
-const MODE_NO_CAPITAL_LETTER = 'noCapitalLetter';
-const MODE_NO_PREFIXES = 'noPrefixes';
-const MODE_NO_SUFFIXES = 'noSuffixes';
-const MODE_STANDARD = 'standard';
-
 class Typograf {
+	MODE_ANY = 'any';
+	MODE_ANY_BEGINNING = 'anyBeginning';
+	MODE_ANY_ENDING = 'anyEnding';
+	MODE_ANY_ENDING_AFTER_KH_OR_SH = 'anyEndingAfterKhOrSh';
+	MODE_AS_IS = 'asIs';
+	MODE_EXCEPTIONS = 'exceptions';
+	MODE_EXTRA_PREFIXES = 'extraPrefixes';
+	MODE_NO_CAPITAL_LETTER = 'noCapitalLetter';
+	MODE_NO_PREFIXES = 'noPrefixes';
+	MODE_NO_SUFFIXES = 'noSuffixes';
+	MODE_STANDARD = 'standard';
+
+	verbCores = {
+		[this.MODE_EXCEPTIONS]:        'Льё,Мнё,Рвё,Трё',
+		[this.MODE_EXTRA_PREFIXES]:    'Берё,Боднё,Вернё,Даё,Живё,Несё,Орё,Плывё,Поё,Ревё,Смеё,Стаё',
+		[this.MODE_NO_CAPITAL_LETTER]: 'Йдё,Ймё',
+		[this.MODE_NO_PREFIXES]:       'Идё,Начнё,Обернё,Придё,Улыбнё',
+		[this.MODE_NO_SUFFIXES]:       'берёг,Берёгся,Шёл',  // NB: the first starts with a small letter to prevent of changing the form without prefixes
+		[this.MODE_STANDARD]:          'Бережё,Блеснё,Блюдё,Блюё,Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Льнё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё',
+	};
+
+	words = {
+		[this.MODE_AS_IS]: 'Её,Ещё,Моё,Неё,Своё,Твоё,'
+			+ 'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Своём,Твоём,'
+			+ 'Журавлём,Кораблём,Королём,Снегирём,Соловьём,'
+			+ 'Копьё,Копьём,'
+			+ 'Трёх,Четырём,Четырёх,'  // "Трём" уже есть как глагол
+			+ 'Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк,'
+			+ 'Затёк,Натёк,Потёк,'
+			+ 'Грёза,Грёзы,Слёзы,'
+			+ 'Бёдер,Белёк,Бельё,Бельём,Бобёр,Бобылём,'
+			+ 'Вперёд,'
+			+ 'Насчёт',
+
+		[this.MODE_ANY]: 'Веретён,Гнёзд,Звёздн,Лёгочн,Лётчи,Надёжн,Налёт,Разъём,Съёмк,'
+			+ 'близёх,близёш,бомбёж,гиллёз,надёг,обретён,омёт,ощёк,растворён,скажён,стёгивал,стёгнут,счётн,уёмн,шёрстн,циллёз,ъёмкост,'
+			+ 'Пролёт,Самолёт,'
+			+ 'Отчёт,Расчёт',
+
+		[this.MODE_ANY_BEGINNING]: 'атырёв,атырём,варём',
+
+		[this.MODE_ANY_ENDING]: 'Актёр,Алён,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём,'
+			+ 'Бабёнк,Бабёф,Балансёр,Балдёж,Банкомёт,Баталёр,Бёдра,Бельёвщиц,Бережён,Берёз,Бесён,Бесслёзн,Бечёвк,Бечёво,Билетёр,Бирюлёв,Благословлён,Блёстк,Бобрён,Боксёр,Бородён,Боронён,Бочкарёв,'
+			+ 'Вёрстк,'
+			+ 'Лёгки,'
+			+ 'Партнёр,Проём,'
+			+ 'Расчёск,'
+			+ 'Чётк,'
+			+ 'Вертолёт,Звездолёт,Отлёт,Перелёт,Полёт,'
+			+ 'Зачёт,Звездочёт,Почёт,Счёт,Учёт',
+
+		[this.MODE_ANY_ENDING_AFTER_KH_OR_SH]: 'Алё,Белё,Бледнё,Бодрё,Больнё',
+	}
+
 	run(element) {
 		if (element && 'textarea' === element.tagName.toLowerCase() && element.value) {
 			const start = element.selectionStart;
@@ -91,23 +134,10 @@ class Typograf {
 	}
 
 	improveYo(text) {
-		// verbs - list of the cores (with a capital letter and yo)
-		text = this.improveYoVerb(text, MODE_EXCEPTIONS,
-			'Льё,Мнё,Рвё,Трё');
-		text = this.improveYoVerb(text, MODE_EXTRA_PREFIXES,
-			'Берё,Боднё,Вернё,Даё,Живё,Несё,Орё,Плывё,Поё,Ревё,Смеё,Стаё');
-		text = this.improveYoVerb(text, MODE_NO_CAPITAL_LETTER,
-			'Йдё,Ймё');
-		text = this.improveYoVerb(text, MODE_NO_PREFIXES,
-			'Идё,Начнё,Обернё,Придё,Улыбнё');
-		text = this.improveYoVerb(text, MODE_NO_PREFIXES,
-			'Льнё,Прильнё');
-		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
-			'берёг,Берёгся');
-		text = this.improveYoVerb(text, MODE_NO_SUFFIXES,
-			'Шёл');
-		text = this.improveYoVerb(text, MODE_STANDARD,
-			'Бережё,Блеснё,Блюдё,Блюё,Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
+		// verbs - cores
+		for (let mode in this.verbCores) {
+			text = this.improveverbCores(text, mode, this.verbCores[mode]);
+		}
 
 		// verbs - unsystematic cases
 		let lookBehind = '(?<![гж-нпру-я])'; // +абвдеост, -ы
@@ -119,68 +149,20 @@ class Typograf {
 		text = this.replaceException(text, 'Расстаёт', '(?![а-дж-я])');
 		text = this.replaceException(text, 'Шлём');
 
-		// list of the words (with a capital letter and yo)
-		text = this.improveYoWord(text, null,
-			'Её,Ещё,Моё,Неё,Своё,Твоё');
-		text = this.improveYoWord(text, null,
-			'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Своём,Твоём');
-		text = this.improveYoWord(text, null,
-			'В моём,На моём,О моём'); // only with certain prepositions
-		text = this.improveYoWord(text, null,
-			'Журавлём,Кораблём,Королём,Снегирём,Соловьём');
-		text = this.improveYoWord(text, null,
-			'Копьё,Копьём');
-		text = this.improveYoWord(text, null,
-			'Трёх,Четырём,Четырёх');  // "Трём" уже есть как глагол
-		text = this.improveYoWord(text, null,
-			'Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
-		text = this.improveYoWord(text, null,
-			'Затёк,Натёк,Потёк');
-		text = this.improveYoWord(text, null,
-			'Грёза,Грёзы,Слёзы');
-		text = this.improveYoWord(text, null,
-			'Бёдер,Белёк,Бельё,Бельём,Бобёр,Бобылём');
-		text = this.improveYoWord(text, null,
-			'Вперёд');
-		text = this.improveYoWord(text, null,
-			'Всё, на чём/Всё, о чём/Всё, про что/Всё, с чем/Всё, что',
-			'/');
-		text = this.improveYoWord(text, MODE_ANY,
-			'Веретён,Гнёзд,Звёздн,Лёгочн,Лётчи,Надёжн,Налёт,Разъём,Съёмк');
-		text = this.improveYoWord(text, MODE_ANY,
-			'близёх,близёш,бомбёж,гиллёз,надёг,обретён,омёт,ощёк,растворён,скажён,стёгивал,стёгнут,счётн,уёмн,шёрстн,циллёз,ъёмкост');
-		text = this.improveYoWord(text, MODE_ANY_BEGINNING,
-			'атырёв,атырём,варём');
-		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Актёр,Алён,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём,'
-			+ 'Бабёнк,Балдёж,Банкомёт,Бёдра,Бельёвщиц,Бережён,Берёз,Бесён,Бесслёзн,Бечёвк,Бечёво,Билетёр,Бирюлёв,Благословлён,Блёстк,Бобрён,Боксёр,Бородён,Боронён,Бочкарёв'
-			+ 'Лёгки,'
-			+ 'Партнёр,Проём');
-		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Бабёф,Балансёр,Баталёр');  // retro
-		text = this.improveYoWord(text, MODE_ANY_ENDING_AFTER_KH_OR_SH,
-			'Алё,Белё,Бледнё,Бодрё,Больнё');
+		// words
+		for (let mode in this.words) {
+			text = this.improveYoWord(text, mode, this.words[mode]);
+		}
 
-		text = this.improveYoWord(text, MODE_ANY,
-			'Пролёт,Самолёт');
-		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Вертолёт,Звездолёт,Отлёт,Перелёт,Полёт');
-
-		text = this.improveYoWord(text, null,
-			'Насчёт');
-		text = this.improveYoWord(text, MODE_ANY,
-			'Отчёт,Расчёт');
-		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Зачёт,Звездочёт,Почёт,Счёт,Учёт');
-
-		text = this.improveYoWord(text, MODE_ANY_ENDING,
-			'Вёрстк,Расчёск,Чётк');
+		// words with a certain preposition
+		text = this.improveYoWord(text, null, 'В моём,На моём,О моём');
+		text = this.improveYoWord(text, null, 'Всё, на чём/Всё, о чём/Всё, про что/Всё, с чем/Всё, что', '/');
 
 		return text;
 	}
 
-	improveYoVerb(text, mode, list, divider = ',') {
-		return this.iterator(text, mode, list, divider, this.replaceYoVerb.bind(this));
+	improveverbCores(text, mode, list, divider = ',') {
+		return this.iterator(text, mode, list, divider, this.replaceverbCores.bind(this));
 	}
 
 	improveYoWord(text, mode, list, divider = ',') {
@@ -234,13 +216,13 @@ class Typograf {
 		return text;
 	}
 
-	replaceYoVerb(text, mode, find, replace) {
-		if (MODE_EXCEPTIONS === mode) {
+	replaceverbCores(text, mode, find, replace) {
+		if (this.MODE_EXCEPTIONS === mode) {
 			return this.replaceYo(text, find, replace,
 				'(?<![б-джзй-нп-тф-я]|зе|ко|фе)' ); // +аеиоу -"зельем" -"корвет" -"фельетон"
 				// '(?=[мтш])(?!мо)(?!ть)'); // -"мнемо" -"треть"
 		}
-		if (MODE_EXTRA_PREFIXES === mode) {
+		if (this.MODE_EXTRA_PREFIXES === mode) {
 			let lookBehind = '(?<![гжк-нпрф-я])'; // +аеиоу +бвдзст
 			if ('Даё' === replace) {
 				lookBehind = '(?<![гжк-нпрф-ъь-я])'; // +ы
@@ -249,14 +231,14 @@ class Typograf {
 			}
 			return this.replaceYo(text, find, replace, lookBehind);
 		}
-		if (MODE_NO_CAPITAL_LETTER === mode) {
+		if (this.MODE_NO_CAPITAL_LETTER === mode) {
 			return this.replaceYo(text, find.toLowerCase(), replace);
 		}
-		if (MODE_NO_PREFIXES === mode) {
+		if (this.MODE_NO_PREFIXES === mode) {
 			return this.replaceYo(text, find, replace,
 				'(?<![А-Яа-яЁё])');
 		}
-		if (MODE_NO_SUFFIXES === mode) {
+		if (this.MODE_NO_SUFFIXES === mode) {
 			return this.replaceYo(text, find, replace,
 				'(?<![б-джзй-нпртф-я])', // +аеиоу +с
 				'(?![а-яё])');
@@ -266,26 +248,27 @@ class Typograf {
 	}
 
 	replaceYoWord(text, mode, find, replace) {
-		if (MODE_ANY === mode) {
+		if (this.MODE_ANY === mode) {
 			return this.replaceYo(text, find, replace,
 				'',
 				'');
 		}
-		if (MODE_ANY_BEGINNING === mode) {
+		if (this.MODE_ANY_BEGINNING === mode) {
 			return this.replaceYo(text, find, replace,
 				'',
 				'(?![а-яё])');
 		}
-		if (MODE_ANY_ENDING === mode) {
+		if (this.MODE_ANY_ENDING === mode) {
 			return this.replaceYo(text, find, replace,
 				'(?<![А-Яа-яЁё])',
 				'');
 		}
-		if (MODE_ANY_ENDING_AFTER_KH_OR_SH === mode) {
+		if (this.MODE_ANY_ENDING_AFTER_KH_OR_SH === mode) {
 			return this.replaceYo(text, find, replace,
 				'(?<![А-Яа-яЁё])',
 				'(?=[шх])');
 		}
+		// MODE_AS_IS
 		return this.replaceYo(text, find, replace,
 			'(?<![А-Яа-яЁё])',
 			'(?![а-яё])');
