@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.01
+// @version      0.6.02
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -22,7 +22,6 @@ class Typograf {
 	MODE_ANY = 'any';
 	MODE_ANY_BEGINNING = 'anyBeginning';
 	MODE_ANY_ENDING = 'anyEnding';
-	MODE_ANY_ENDING_AFTER_KH_OR_SH = 'anyEndingAfterKhOrSh';
 	MODE_AS_IS = 'asIs';
 	MODE_EXCEPTIONS = 'exceptions';
 	MODE_EXTRA_PREFIXES = 'extraPrefixes';
@@ -53,14 +52,17 @@ class Typograf {
 		+ 'Насчёт,'
 		+ 'Бёдер,Белёк,Бельём,Бобёр,Бобылём',
 
-		[this.MODE_ANY]: 'близёх,близёш,бомбёж,гиллёз,надёг,обретён,омёт,ощёк,растворён,скажён,стёгивал,стёгнут,счётн,уёмн,шёрстн,циллёз,ъёмкост,'
+		[this.MODE_ANY]: 'ёхоньк,ёшеньк,'
+		+ 'ворённ,ретённ,'
+		+ 'творён,бретён,'
+		+ 'бомбёж,гиллёз,надёг,омёт,ощёк,скажён,стёгивал,стёгнут,счётн,уёмн,шёрстн,циллёз,ъёмкост,'
 		+ 'Пролёт,Самолёт,'
 		+ 'Отчёт,Расчёт,'
 		+ 'Веретён,Гнёзд,Звёздн,Лёгочн,Лётчи,Надёжн,Налёт,Разъём,Съёмк,',
 
 		[this.MODE_ANY_BEGINNING]: 'атырёв,атырём,варём',
 
-		[this.MODE_ANY_ENDING]: 'Актёр,Алён,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём,'
+		[this.MODE_ANY_ENDING]: 'Актёр,Алён,Алёх,Алёш,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём,'
 		+ 'Бабёнк,Бабёф,Балансёр,Балдёж,Банкомёт,Баталёр,Бёдра,Бельёвщиц,Бережён,Берёз,Бесён,Бесслёзн,Бечёвк,Бечёво,Билетёр,Бирюлёв,Благословлён,Блёстк,Бобрён,Боксёр,Бородён,Боронён,Бочкарёв,'
 		+ 'Вёрстк,'
 		+ 'Лёгки,'
@@ -69,8 +71,6 @@ class Typograf {
 		+ 'Чётк,'
 		+ 'Вертолёт,Звездолёт,Отлёт,Перелёт,Полёт,'
 		+ 'Зачёт,Звездочёт,Почёт,Счёт,Учёт',
-
-		[this.MODE_ANY_ENDING_AFTER_KH_OR_SH]: 'Алё,Белё,Бледнё,Бодрё,Больнё',
 	}
 
 	run(element) {
@@ -262,11 +262,6 @@ class Typograf {
 			return this.replaceYo(text, find, replace,
 				'(?<![А-Яа-яЁё])',
 				'');
-		}
-		if (this.MODE_ANY_ENDING_AFTER_KH_OR_SH === mode) {
-			return this.replaceYo(text, find, replace,
-				'(?<![А-Яа-яЁё])',
-				'(?=[шх])');
 		}
 		// MODE_AS_IS
 		return this.replaceYo(text, find, replace,
