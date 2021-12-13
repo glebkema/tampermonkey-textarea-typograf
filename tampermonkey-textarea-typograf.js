@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.04
+// @version      0.6.05
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -159,7 +159,7 @@ class Typograf {
 
 		// words with a certain preposition
 		text = this.improveYoWord(text, null, 'В моём,На моём,О моём');
-		text = this.improveYoWord(text, null, 'Всё, на чём/Всё, о чём/Всё, про что/Всё, с чем/Всё, что', '/');
+		text = this.improveYoWord(text, null, 'Всё, на чём/Всё, о чём/Всё, про что/Всё, с чем/Всё, что/Всё-таки', '/');
 
 		return text;
 	}
