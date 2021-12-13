@@ -28,4 +28,4 @@ Check the efficiency of the algorithm on the words with the letter "yo" collecte
 mocha test/test-yobase.js
 ```
 
-On 2021-12-13 the script corrected 8187 words out of 58138 = 14.08 %
+On 2021-12-13 the script corrected 8213 words out of 58138 = 14.13 %

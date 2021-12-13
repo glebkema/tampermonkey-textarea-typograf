@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.05
+// @version      0.6.06
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -53,7 +53,7 @@ class Typograf {
 		+ 'Вперёд,'
 		+ 'Бёдер,Белёк,Бельём,Бобёр,Бобылём',
 
-		[this.MODE_ANY]: 'ёхоньк,ёшеньк,'
+		[this.MODE_ANY]: 'ёхонек,ёхоньк,ёшенек,ёшеньк,'
 		+ 'ворённ,ретённ,'
 		+ 'творён,бретён,'
 		+ 'бомбёж,гиллёз,надёг,омёт,ощёк,скажён,стёгивал,стёгнут,счётн,уёмн,шёрстн,циллёз,ъёмкост,'
