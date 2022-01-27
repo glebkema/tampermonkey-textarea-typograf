@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.06
+// @version      0.6.07
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -114,8 +114,8 @@ class Typograf {
 		// text = text.replace(/["„“](?=$|[.,;:!?)\s])/g, '»');
 
 		// use only one type
-		text = text.replace(/["„“](?=["„“«]*[\wа-яё(])/gi, '«');
-		text = text.replace(/(?<=[\wа-яё).!?]["„“»]*)["„“]/gi, '»');
+		text = text.replace(/["„“”](?=["„“”«]*[\wа-яё(])/gi, '«');
+		text = text.replace(/(?<=[\wа-яё).!?]["„“”»]*)["„“”]/gi, '»');
 
 		// nested quotes
 		// (?:«[^»]*)([«"])([^"»]*)(["»])
