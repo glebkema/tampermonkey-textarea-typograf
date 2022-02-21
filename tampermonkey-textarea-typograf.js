@@ -3,9 +3,9 @@
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
 // @description  Replaces hyphens, quotation marks, uncanonic smiles and "yo" in some russian words.
 // @author       glebkema
-// @copyright    2020-2021, Gleb Kemarsky (https://github.com/glebkema)
+// @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.08
+// @version      0.6.10
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -22,6 +22,7 @@ class Typograf {
 	MODE_ANY = 'any';
 	MODE_ANY_BEGINNING = 'anyBeginning';
 	MODE_ANY_ENDING = 'anyEnding';
+	MODE_ANY_ENDING_EXCEPT_L = 'anyEndingExceptL';
 	MODE_AS_IS = 'asIs';
 	MODE_EXCEPTIONS = 'exceptions';
 	MODE_EXTRA_PREFIXES = 'extraPrefixes';
@@ -41,7 +42,7 @@ class Typograf {
 
 	words = {
 		[this.MODE_AS_IS]: 'Её,Ещё,Моё,Неё,Своё,Твоё,'
-		+ 'Вдвоём,Втроём,Объём,Остриём,Приём,Причём,Своём,Твоём,'
+		+ 'Вдвоём,Втроём,Объём,Остриём,Причём,Своём,Твоём,'
 		+ 'Грёза,Грёзы,Слёзы,'
 		+ 'Затёк,Натёк,Потёк,'
 		+ 'Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк,'
@@ -51,12 +52,13 @@ class Typograf {
 		+ 'Вперёд,'
 		+ 'Запёк,Предпочёл,Прочёл,'
 		+ 'Вперёд,'
-		+ 'Бёдер,Белёк,Бельём,Бобёр,Бобылём',
+		+ 'Бёдер,Белёк,Бельём,Бобёр,Бобылём,'
+		+ 'Рулём',
 
 		[this.MODE_ANY]: 'ёхонек,ёхоньк,ёшенек,ёшеньк,'
 		+ 'ворённ,ретённ,'
 		+ 'творён,бретён,'
-		+ 'бомбёж,гиллёз,надёг,омёт,ощёк,скажён,стёгивал,стёгнут,счётн,уёмн,шёрстн,циллёз,ъёмкост,'
+		+ 'бомбёж,гиллёз,надёг,омёт,ощёк,скажён,счётн,уёмн,шёрстн,циллёз,ъёмкост,'  // стёгивал,стёгнут,
 		+ 'Пролёт,Самолёт,'
 		+ 'Отчёт,Расчёт,'
 		+ 'Веретён,Гнёзд,Звёздн,Лёгочн,Лётчи,Надёжн,Налёт,Разъём,Съёмк,',
@@ -72,8 +74,10 @@ class Typograf {
 		+ 'Расчёск,'
 		+ 'Чётк,'
 		+ 'Вертолёт,Звездолёт,Отлёт,Перелёт,Полёт,'
-		+ 'Заём,Наём,Приём,'
+		+ 'Заём,Наём,'
 		+ 'Зачёт,Звездочёт,Почёт,Счёт,Учёт',
+
+		[this.MODE_ANY_ENDING_EXCEPT_L]: 'Приём',
 	}
 
 	run(element) {
@@ -146,6 +150,10 @@ class Typograf {
 		let lookBehind = '(?<![гж-нпру-я])'; // +абвдеост, -ы
 		text = this.replaceYo(text, 'Дерг', 'Дёрг', lookBehind, '(?![б-яё])');    // +а, -у
 		text = this.replaceYo(text, 'Дерн', 'Дёрн', lookBehind, '(?![б-джзй-нп-тф-ъь-яё])');  // +аеиоуы (сущ. или глагол)
+
+		lookBehind = '(?<![бвге-зй-ру-я])'; // +адист
+		text = this.replaceYo(text, 'Стег', 'Стёг', lookBehind, '(?!ал|ать|ну)');
+		text = this.replaceYo(text, 'Стегнут', 'Стёгнут', lookBehind, '(?!ь)');  // NB: расстёгнутый
 
 		// verbs - fix the exceptions
 		text = this.replaceException(text, 'Раздольём');
@@ -265,6 +273,11 @@ class Typograf {
 			return this.replaceYo(text, find, replace,
 				'(?<![А-Яа-яЁё])',
 				'');
+		}
+		if (this.MODE_ANY_ENDING_EXCEPT_L === mode) {
+			return this.replaceYo(text, find, replace,
+				'(?<![А-Яа-яЁё])',
+				'(?![л])');
 		}
 		// MODE_AS_IS
 		return this.replaceYo(text, find, replace,
