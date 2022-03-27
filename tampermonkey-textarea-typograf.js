@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.10
+// @version      0.6.11
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -136,7 +136,12 @@ class Typograf {
 	}
 
 	improveSmile(text) {
+		// fix uncanonical smiles
 		text = text.replace(/([:;])[—oо]?([D)(|])/g, '$1-$2');
+
+		// remove the dot before the smile
+		text = text.replace(/(?<=[А-ЯЁа-яё])\.\s*(?=[:;]-[D)(|])/g, ' ');
+
 		return text;
 	}
 
