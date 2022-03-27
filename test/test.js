@@ -98,6 +98,9 @@ describe('class Typograf', function() {
 				}
 			}
 		}
+
+		// remove the dot before the smile
+		testSmile( 'dot with a smile', 'Вот. :( Так-то... ;-)', 'Вот :-( Так-то... ;-)' );
 	});
 
 	context('method improveYo()', function() {
