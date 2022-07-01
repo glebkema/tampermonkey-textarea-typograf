@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.14
+// @version      0.6.15
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -24,6 +24,7 @@ class Typograf {
 	MODE_ANY_ENDING = 'anyEnding';
 	MODE_ANY_ENDING_EXCEPT_L = 'anyEndingExceptL';
 	MODE_ANY_EXCEPT_I = 'anyExceptI';
+	MODE_ANY_EXCEPT_K = 'anyExceptK';
 	MODE_ANY_EXCEPT_R = 'anyExceptR';
 	MODE_AS_IS = 'asIs';
 	MODE_EXCEPTIONS = 'exceptions';
@@ -63,8 +64,7 @@ class Typograf {
 		+ 'бомбёж,гиллёз,надёг,ощёк,счётн,уёмн,шёрстн,циллёз,ъёмкост,'  // стёгивал,стёгнут,
 		+ 'Пролёт,Самолёт,'
 		+ 'Отчёт,Расчёт,'
-		+ 'Веретён,Гнёзд,Звёздн,Лёгочн,Лётчи,Надёжн,Налёт,Разъём,Съёмк,'
-		+ 'бъё',
+		+ 'Веретён,Гнёзд,Звёздн,Лёгочн,Лётчи,Надёжн,Налёт,Разъём,Съёмк,',
 
 		[this.MODE_ANY_BEGINNING]: 'атырёв,атырём,варём,'
 		+ 'арьё,арьём,ерьё,ерьём,ырьё,ырьём',
@@ -84,7 +84,10 @@ class Typograf {
 
 		[this.MODE_ANY_ENDING_EXCEPT_L]: 'Приём',
 
+
 		[this.MODE_ANY_EXCEPT_I]: 'скажён',
+
+		[this.MODE_ANY_EXCEPT_K]: 'бъё',
 
 		[this.MODE_ANY_EXCEPT_R]: 'омёт',
 	}
@@ -297,6 +300,11 @@ class Typograf {
 			return this.replaceYo(text, find, replace,
 				'',
 				'(?![и])');
+		}
+		if (this.MODE_ANY_EXCEPT_K === mode) {
+			return this.replaceYo(text, find, replace,
+				'',
+				'(?![к])');
 		}
 		if (this.MODE_ANY_EXCEPT_R === mode) {
 			return this.replaceYo(text, find, replace,

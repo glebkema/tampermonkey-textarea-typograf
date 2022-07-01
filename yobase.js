@@ -59725,25 +59725,25 @@ const strYobase = `
 // ([а-яё]+)(?:ая\n)(\1(ие|ий|им|ими|их|ого|ое|ой|ом|ому|ою|ую)\n)+
 
 function capitalize(s) {
-    return s && s[0].toUpperCase() + s.slice(1);  // https://stackoverflow.com/a/7224605/6263942
+	return s && s[0].toUpperCase() + s.slice(1);  // https://stackoverflow.com/a/7224605/6263942
 }
 
 function getAdjectives() {
-    const youbase = removeStarred(strYobase);
-    const matches = youbase.matchAll(/^([а-яё]+)ая$/gm);
-    let adjectives = [];
-    for (const match of matches) {
-        adjectives.push(capitalize(match[1]));
-    }
-    return adjectives;
+	const youbase = removeStarred(strYobase);
+	const matches = youbase.matchAll(/^([а-яё]+)ая$/gm);
+	let adjectives = [];
+	for (const match of matches) {
+		adjectives.push(capitalize(match[1]));
+	}
+	return adjectives;
 }
 
 function getYobase() {
-    return removeStarred(strYobase).trim().split("\n");
+	return removeStarred(strYobase).trim().split("\n");
 }
 
 function removeStarred(text) {
-    return text.replace(/^\*\s[а-яё]+\s/gm, '');
+	return text.replace(/^\*\s[а-яё]+\s/gm, '');
 }
 
 // console.log(getAdjectives());
@@ -59751,5 +59751,5 @@ function removeStarred(text) {
 // console.log(getYobase());
 
 module.exports = {
-    yobase: getYobase(),
+	yobase: getYobase(),
 };
