@@ -163,6 +163,9 @@ describe('class Typograf', function() {
 
 		doNotChange('Субъект,Объективные');
 
+		testYo('Придаёт');
+		doNotChange('Ожидает,Покидает');
+
 		// MODE_STANDARD
 		compareYoVerb('Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
 		testYo('Воробьём,Соловьём');
