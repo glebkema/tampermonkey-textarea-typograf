@@ -165,6 +165,7 @@ describe('class Typograf', function() {
 
 		testYo('Придаёт');
 		doNotChange('Ожидает,Покидает');
+		doNotChange('Западает,Падает,Попадает');
 
 		// MODE_STANDARD
 		compareYoVerb('Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');
