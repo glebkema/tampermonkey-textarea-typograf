@@ -147,6 +147,9 @@ describe('class Typograf', function() {
 
 		testYo('Рулём');
 
+		testYo('Одёжа,Одёжка,Одёжный');
+		doNotChange('Одежда,Одежда');
+
 		doNotChange('Зелёный,Зелёнка');
 		doNotChange('Зеленеть,Зелень');
 		doNotChange('Искажения,Километрах');
