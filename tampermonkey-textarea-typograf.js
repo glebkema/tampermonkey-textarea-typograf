@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.18
+// @version      0.6.19
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -77,7 +77,7 @@ class Typograf {
 		+ 'Запёкш,Запечён,Испечён,'
 		+ 'Лёгки,'
 		+ 'Партнёр,Проём,'
-		+ 'Расчёск,'
+		+ 'Расчёск,Ребён,'
 		+ 'Чётк,'
 		+ 'Вертолёт,Звездолёт,Отлёт,Перелёт,Полёт,'
 		+ 'Заём,Наём,'
