@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.19
+// @version      0.6.20
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -47,6 +47,7 @@ class Typograf {
 	words = {
 		[this.MODE_AS_IS]: 'Её,Ещё,Моё,Неё,Своё,Твоё,'
 		+ 'Вдвоём,Втроём,Объём,Остриём,Причём,Своём,Твоём,'
+		+ 'Взахлёб,'
 		+ 'Грёза,Грёзы,Слёзы,'
 		+ 'Затёк,Натёк,Потёк,'
 		+ 'Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк,'
@@ -187,6 +188,7 @@ class Typograf {
 
 		// words with a certain preposition
 		text = this.improveYoWord(text, null, 'В моём,На моём,О моём');
+		text = this.improveYoWord(text, null, 'В нём,О нём,При нём');
 		text = this.improveYoWord(text, null, 'Всё, на чём/Всё, о чём/Всё, про что/Всё, с чем/Всё, что/Всё-таки', '/');
 
 		return text;
