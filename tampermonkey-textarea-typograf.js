@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.20
+// @version      0.6.21
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -81,6 +81,7 @@ class Typograf {
 		+ 'Расчёск,Ребён,'
 		+ 'Чётк,'
 		+ 'Вертолёт,Звездолёт,Отлёт,Перелёт,Полёт,'
+		+ 'Жёстк,'
 		+ 'Заём,Наём,'
 		+ 'Зачёт,Звездочёт,Почёт,Счёт,Учёт',
 
