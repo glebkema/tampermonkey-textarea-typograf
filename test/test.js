@@ -113,6 +113,9 @@ describe('class Typograf', function() {
 
 		testYo('Съёмка', 'Съёмка аэрогеосъёмкой');
 
+		testYo('Жёстко,Жёсткий');
+		doNotChange('Жесть,Жестоко');
+
 		compareYoWord('Зачёт,Звездочёт,Отчёт,Почёт,Расчёт,Счёт,Учёт', [], adjectiveEndings);
 		testYo('Зачётка');
 		// TODO: Зачтённый..., Учтённый...
