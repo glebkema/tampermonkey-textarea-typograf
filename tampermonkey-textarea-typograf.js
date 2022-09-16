@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.21
+// @version      0.6.22
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -23,6 +23,7 @@ class Typograf {
 	MODE_ANY_BEGINNING = 'anyBeginning';
 	MODE_ANY_ENDING = 'anyEnding';
 	MODE_ANY_ENDING_EXCEPT_D = 'anyEndingExceptD';
+	MODE_ANY_ENDING_EXCEPT_I_AND_SOFT_SIGN = 'anyEndingExceptIAndSoftSign';
 	MODE_ANY_ENDING_EXCEPT_L = 'anyEndingExceptL';
 	MODE_ANY_EXCEPT_I = 'anyExceptI';
 	MODE_ANY_EXCEPT_K = 'anyExceptK';
@@ -58,7 +59,8 @@ class Typograf {
 		+ 'Запёк,Предпочёл,Прочёл,'
 		+ 'Вперёд,'
 		+ 'Бёдер,Белёк,Бельём,Бобёр,Бобылём,'
-		+ 'Рулём',
+		+ 'Рулём,'
+		+ 'Твёрже',
 
 		[this.MODE_ANY]: 'ёхонек,ёхоньк,ёшенек,ёшеньк,'
 		+ 'ворённ,ретённ,'
@@ -86,6 +88,8 @@ class Typograf {
 		+ 'Зачёт,Звездочёт,Почёт,Счёт,Учёт',
 
 		[this.MODE_ANY_ENDING_EXCEPT_D]: 'Одёж',
+
+		[this.MODE_ANY_ENDING_EXCEPT_I_AND_SOFT_SIGN]: 'Твёрд',
 
 		[this.MODE_ANY_ENDING_EXCEPT_L]: 'Приём',
 
@@ -301,6 +305,11 @@ class Typograf {
 			return this.replaceYo(text, find, replace,
 				'(?<![А-Яа-яЁё])',
 				'(?![д])');
+		}
+		if (this.MODE_ANY_ENDING_EXCEPT_I_AND_SOFT_SIGN === mode) {
+			return this.replaceYo(text, find, replace,
+				'(?<![А-Яа-яЁё])',
+				'(?![иь])');
 		}
 		if (this.MODE_ANY_ENDING_EXCEPT_L === mode) {
 			return this.replaceYo(text, find, replace,

@@ -159,6 +159,11 @@ describe('class Typograf', function() {
 
 		testYo('Рулём');
 
+		testYo('Твёрдо,Твёрдость,Твёрдый');
+		testYo('Твёрже');
+		doNotChange('Тверди,Твердить,Твердь,Тверь');
+		doNotChange('Твержу,Отверженные,Утверждение');
+
 		doNotChange('Зелёный,Зелёнка');
 		doNotChange('Зеленеть,Зелень');
 		doNotChange('Искажения,Километрах');
