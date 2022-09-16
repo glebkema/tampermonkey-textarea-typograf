@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.22
+// @version      0.6.23
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -29,6 +29,7 @@ class Typograf {
 	MODE_ANY_EXCEPT_K = 'anyExceptK';
 	MODE_ANY_EXCEPT_R = 'anyExceptR';
 	MODE_AS_IS = 'asIs';
+	MODE_ENDINGS_1 = 'endings1';
 	MODE_EXCEPTIONS = 'exceptions';
 	MODE_EXTRA_PREFIXES = 'extraPrefixes';
 	MODE_NO_CAPITAL_LETTER = 'noCapitalLetter';
@@ -92,6 +93,8 @@ class Typograf {
 		[this.MODE_ANY_ENDING_EXCEPT_I_AND_SOFT_SIGN]: 'Твёрд',
 
 		[this.MODE_ANY_ENDING_EXCEPT_L]: 'Приём',
+
+		[this.MODE_ENDINGS_1]: 'Зелён',   // [аоуык]
 
 
 		[this.MODE_ANY_EXCEPT_I]: 'скажён',
@@ -330,6 +333,11 @@ class Typograf {
 			return this.replaceYo(text, find, replace,
 				'',
 				'(?![р])');
+		}
+		if (this.MODE_ENDINGS_1 === mode) {
+			return this.replaceYo(text, find, replace,
+				'',
+				'(?=[аоуык])');
 		}
 		// MODE_AS_IS
 		return this.replaceYo(text, find, replace,
