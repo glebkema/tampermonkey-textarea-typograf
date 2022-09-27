@@ -134,6 +134,10 @@ describe('class Typograf', function() {
 		testYo('Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
 		doNotChange('Приемлемый');
 
+		// MODE_ANY_EXCEPT_I
+		doNotChange('Искажение,Обретение');
+		doNotChange('Творение,Сотворение,Стихотворение,Удовлетворение');
+
 		// words with a certain preposition
 		testYo('О своём деле,На твоём месте');
 		testYo('В моём случае и о моём проекте на моём экране');
@@ -142,6 +146,8 @@ describe('class Typograf', function() {
 		doNotChange('В немоте,О немом,Нем');
 
 		testYo('-варём', 'Букварём,Главарём,Словарём');
+
+		// TODO: testYo('Закруглённый');
 
 		testYo('Зелёная,Зелёной,Зелёную,Зелёный,Зелёнка');
 		doNotChange('Зелен,Зеленеть,Зелени,Зелень');
@@ -174,6 +180,9 @@ describe('class Typograf', function() {
 		doNotChange('Третий,Треть,Трещина');
 		doNotChange('Трехнуть');
 
+		// TODO: testYo('Жёлтый');
+		doNotChange('Желтеть,Желток');
+
 		// TODO: testYo('Чёрный');
 		doNotChange('Чернота,Чернь,Черныш');
 
@@ -192,6 +201,8 @@ describe('class Typograf', function() {
 		testYo('Придаёт');
 		doNotChange('Ожидает,Покидает');
 		doNotChange('Западает,Падает,Попадает');
+
+		// TODO: doNotChange('Метка,Меткой,Пометкой');
 
 		// MODE_STANDARD
 		compareYoVerb('Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Несё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё');

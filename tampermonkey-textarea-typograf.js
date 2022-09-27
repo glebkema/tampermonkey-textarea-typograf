@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.24
+// @version      0.6.25
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -66,7 +66,6 @@ class Typograf {
 
 		[this.MODE_ANY]: 'ёхонек,ёхоньк,ёшенек,ёшеньк,'
 		+ 'ворённ,ретённ,'
-		+ 'творён,бретён,'
 		+ 'бомбёж,гиллёз,надёг,ощёк,счётн,уёмн,шёрстн,циллёз,ъёмкост,'  // стёгивал,стёгнут,
 		+ 'Пролёт,Самолёт,'
 		+ 'Отчёт,Расчёт,'
@@ -101,7 +100,7 @@ class Typograf {
 		[this.MODE_ENDINGS_1]: 'Зелён',   // [аоуык]
 
 
-		[this.MODE_ANY_EXCEPT_I]: 'скажён',
+		[this.MODE_ANY_EXCEPT_I]: 'бретён,скажён,творён',
 
 		[this.MODE_ANY_EXCEPT_K]: 'бъё',
 
