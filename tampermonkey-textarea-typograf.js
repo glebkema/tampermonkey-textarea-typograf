@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.6.25
+// @version      0.7.00
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
