@@ -59730,7 +59730,7 @@ function capitalize(s) {
 
 function getAdjectives() {
 	const youbase = removeStarred(strYobase);
-	const matches = youbase.matchAll(/^([а-яё]+)ая$/gm);
+	const matches = youbase.matchAll(/^([а-яё]+ая)$/gm);
 	let adjectives = [];
 	for (const match of matches) {
 		adjectives.push(capitalize(match[1]));
@@ -59751,5 +59751,6 @@ function removeStarred(text) {
 // console.log(getYobase());
 
 module.exports = {
-	yobase: getYobase(),
+	adjectives: getAdjectives(),
+	yobase    : getYobase(),
 };
