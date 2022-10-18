@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.7.00
+// @version      0.7.01
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -26,6 +26,7 @@ class Typograf {
 	MODE_ANY_ENDING_EXCEPT_I_AND_SOFT_SIGN = 'anyEndingExceptIAndSoftSign';
 	MODE_ANY_ENDING_EXCEPT_L = 'anyEndingExceptL';
 	MODE_ANY_ENDING_EXCEPT_N = 'anyEndingExceptN';
+	MODE_ANY_EXCEPT_BEGINNING_Y = 'anyBeginningExceptY';
 	MODE_ANY_EXCEPT_I = 'anyExceptI';
 	MODE_ANY_EXCEPT_K = 'anyExceptK';
 	MODE_ANY_EXCEPT_R = 'anyExceptR';
@@ -65,14 +66,24 @@ class Typograf {
 		+ 'Твёрже',
 
 		[this.MODE_ANY]: 'ёхонек,ёхоньк,ёшенек,ёшеньк,'
-		+ 'ворённ,ретённ,'
 		+ 'бомбёж,гиллёз,надёг,ощёк,счётн,уёмн,шёрстн,циллёз,ъёмкост,'  // стёгивал,стёгнут,
 		+ 'Пролёт,Самолёт,'
 		+ 'Отчёт,Расчёт,'
-		+ 'Веретён,Гнёзд,Звёздн,Лёгочн,Лётчи,Надёжн,Налёт,Разъём,Съёмк,',
+		+ 'Веретён,Гнёзд,Звёздн,Лёгочн,Лётчи,Надёжн,Налёт,Разъём,Съёмк,'
+
+		// adjectives
+		+ 'бережённ,ворённ,мягчённ,ретённ,таённ,теплённ',
 
 		[this.MODE_ANY_BEGINNING]: 'атырёв,атырём,варём,'
 		+ 'арьё,арьём,ерьё,ерьём,ырьё,ырьём',
+
+		[this.MODE_ANY_EXCEPT_BEGINNING_Y]:
+
+		// adjectives
+		'несённ,'
+		+ 'тёкш,тёрт,тёрш,'
+		+ 'точён,'
+		+ 'шёрстн',
 
 		[this.MODE_ANY_ENDING]: 'Актёр,Алён,Алёх,Алёш,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём,'
 		+ 'Бабёнк,Бабёф,Балансёр,Балдёж,Банкомёт,Баталёр,Бёдра,Бельёвщиц,Бережён,Берёз,Бесён,Бесслёзн,Бечёвк,Бечёво,Билетёр,Бирюлёв,Благословлён,Блёстк,Бобрён,Боксёр,Бородён,Боронён,Бочкарёв,'
@@ -326,6 +337,11 @@ class Typograf {
 			return this.replaceYo(text, find, replace,
 				'(?<![А-Яа-яЁё])',
 				'(?![н])');
+		}
+		if (this.MODE_ANY_EXCEPT_BEGINNING_Y === mode) {
+			return this.replaceYo(text, find, replace,
+				'(?<![ы])',
+				'');
 		}
 		if (this.MODE_ANY_EXCEPT_I === mode) {
 			return this.replaceYo(text, find, replace,
