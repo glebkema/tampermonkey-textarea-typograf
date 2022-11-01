@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.7.02
+// @version      0.7.03
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -81,14 +81,14 @@ class Typograf {
 		[this.MODE_ANY_BEGINNING_EXCEPT_O_AND_Y]:
 
 		// adjectives
-		'точён',  // - сосредоточено
+		'Точён',  // - сосредоточено
 
 		[this.MODE_ANY_BEGINNING_EXCEPT_Y]:
 
 		// adjectives
 		'несённ,'
-		+ 'тёкш,тёрт,тёрш,'
-		+ 'шёрстн',
+		+ 'тёкш,Тёрт,тёрш,'
+		+ 'Шёрстн',
 
 		[this.MODE_ANY_ENDING]: 'Актёр,Алён,Алёх,Алёш,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём,'
 		+ 'Бабёнк,Бабёф,Балансёр,Балдёж,Банкомёт,Баталёр,Бёдра,Бельёвщиц,Бережён,Берёз,Бесён,Бесслёзн,Бечёвк,Бечёво,Билетёр,Бирюлёв,Благословлён,Блёстк,Бобрён,Боксёр,Бородён,Боронён,Бочкарёв,'
