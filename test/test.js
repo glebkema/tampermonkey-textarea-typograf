@@ -134,6 +134,8 @@ describe('class Typograf', function() {
 		testYo('Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
 		doNotChange('Приемлемый');
 
+		doNotChange('Сосредоточено');
+
 		// MODE_ANY_EXCEPT_I
 		doNotChange('Искажение,Обретение');
 		doNotChange('Творение,Сотворение,Стихотворение,Удовлетворение');
