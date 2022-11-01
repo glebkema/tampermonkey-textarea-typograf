@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.7.01
+// @version      0.7.02
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -21,12 +21,13 @@
 class Typograf {
 	MODE_ANY = 'any';
 	MODE_ANY_BEGINNING = 'anyBeginning';
+	MODE_ANY_BEGINNING_EXCEPT_O_AND_Y = 'anyBeginningExceptOAndY';
+	MODE_ANY_BEGINNING_EXCEPT_Y = 'anyBeginningExceptY';
 	MODE_ANY_ENDING = 'anyEnding';
 	MODE_ANY_ENDING_EXCEPT_D = 'anyEndingExceptD';
 	MODE_ANY_ENDING_EXCEPT_I_AND_SOFT_SIGN = 'anyEndingExceptIAndSoftSign';
 	MODE_ANY_ENDING_EXCEPT_L = 'anyEndingExceptL';
 	MODE_ANY_ENDING_EXCEPT_N = 'anyEndingExceptN';
-	MODE_ANY_EXCEPT_BEGINNING_Y = 'anyBeginningExceptY';
 	MODE_ANY_EXCEPT_I = 'anyExceptI';
 	MODE_ANY_EXCEPT_K = 'anyExceptK';
 	MODE_ANY_EXCEPT_R = 'anyExceptR';
@@ -77,12 +78,16 @@ class Typograf {
 		[this.MODE_ANY_BEGINNING]: 'атырёв,атырём,варём,'
 		+ 'арьё,арьём,ерьё,ерьём,ырьё,ырьём',
 
-		[this.MODE_ANY_EXCEPT_BEGINNING_Y]:
+		[this.MODE_ANY_BEGINNING_EXCEPT_O_AND_Y]:
+
+		// adjectives
+		'точён',  // - сосредоточено
+
+		[this.MODE_ANY_BEGINNING_EXCEPT_Y]:
 
 		// adjectives
 		'несённ,'
 		+ 'тёкш,тёрт,тёрш,'
-		+ 'точён,'
 		+ 'шёрстн',
 
 		[this.MODE_ANY_ENDING]: 'Актёр,Алён,Алёх,Алёш,Алфёр,Аматёр,Амёб,Анкетёр,Антрепренёр,Артём,'
@@ -313,6 +318,16 @@ class Typograf {
 				'',
 				'(?![а-яё])');
 		}
+		if (this.MODE_ANY_BEGINNING_EXCEPT_O_AND_Y === mode) {
+			return this.replaceYo(text, find, replace,
+				'(?<![оы])',
+				'');
+		}
+		if (this.MODE_ANY_BEGINNING_EXCEPT_Y === mode) {
+			return this.replaceYo(text, find, replace,
+				'(?<![ы])',
+				'');
+		}
 		if (this.MODE_ANY_ENDING === mode) {
 			return this.replaceYo(text, find, replace,
 				'(?<![А-Яа-яЁё])',
@@ -337,11 +352,6 @@ class Typograf {
 			return this.replaceYo(text, find, replace,
 				'(?<![А-Яа-яЁё])',
 				'(?![н])');
-		}
-		if (this.MODE_ANY_EXCEPT_BEGINNING_Y === mode) {
-			return this.replaceYo(text, find, replace,
-				'(?<![ы])',
-				'');
 		}
 		if (this.MODE_ANY_EXCEPT_I === mode) {
 			return this.replaceYo(text, find, replace,

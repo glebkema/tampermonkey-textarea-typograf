@@ -18,9 +18,14 @@ Incompatible with Safari and IE11 due to the use of [lookbehind in JS regular ex
 $ npm install --global mocha
 ```
 
-Run:
+Run all tests:
 ```
 mocha test
+```
+
+Check main methods:
+```
+mocha test/test.js
 ```
 
 Check the efficiency of the algorithm on the words with the letter "yo" collected by the project http://python.anabar.ru/yo.htm
