@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.7.04
+// @version      0.7.05
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -42,7 +42,7 @@ class Typograf {
 
 	verbCores = {
 		[this.MODE_EXCEPTIONS]:        'Льё,Мнё,Рвё,Трё',
-		[this.MODE_EXTRA_PREFIXES]:    'Берё,Боднё,Вернё,Даё,Живё,Несё,Орё,Плывё,Поё,Ревё,Смеё,Стаё',
+		[this.MODE_EXTRA_PREFIXES]:    'Берё,Боднё,Вернё,Даё,Живё,Несё,Орё,Пасё,Плывё,Поё,Ревё,Смеё,Стаё',
 		[this.MODE_NO_CAPITAL_LETTER]: 'Йдё,Ймё',
 		[this.MODE_NO_PREFIXES]:       'Идё,Начнё,Обернё,Придаё,Придё,Улыбнё',
 		[this.MODE_NO_SUFFIXES]:       'берёг,Берёгся,Шёл',  // NB: the first starts with a small letter to prevent of changing the form without prefixes
@@ -287,6 +287,8 @@ class Typograf {
 			let lookBehind = '(?<![гжк-нпрф-я])'; // +аеиоу +бвдзст
 			if ('Даё' === replace) {
 				lookBehind = '(?<![гжик-нпрф-ъь-я]|па)'; // -и +ы  >>> +'Придаёт', -"Попадает"
+			} else if ('Пасё' === replace) {
+				lookBehind = '(?<![б-зй-нпртф-я])';  // "напасёшься"
 			} else if ('Стаё' === replace) {
 				lookBehind = '(?<![гжк-нпрф-я]|ра)'; // -"вы/за/от/подрастает"
 			}

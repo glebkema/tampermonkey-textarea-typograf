@@ -224,6 +224,7 @@ describe('class Typograf', function() {
 		compareYoVerb('Вернё', ['от', 'под', 'раз', 'с']);
 		compareYoVerb('Даё', ['воз', 'вы', 'об', 'от', 'с']); // !!! вы
 		compareYoVerb('Орё', ['об', 'раз']);
+		compareYoVerb('Пасё', ['за', 'на', 'при', 'про', 'с', 'у']);
 		compareYoVerb('Плывё', ['вс', 'об', 'от', 'под']);
 		compareYoVerb('Поё', ['вос', 'от', 'под', 'рас', 'с']);
 
