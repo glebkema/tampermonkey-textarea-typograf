@@ -151,9 +151,6 @@ describe('class Typograf', function() {
 
 		// TODO: testYo('Закруглённый');
 
-		testYo('Зелёная,Зелёной,Зелёную,Зелёный,Зелёнка');
-		doNotChange('Зелен,Зеленеть,Зелени,Зелень');
-
 		doNotChange('Искажения,Километрах');
 
 		testYo('Огнём,Артогнём');  // by improveYoVerb('Гнё')
@@ -224,6 +221,7 @@ describe('class Typograf', function() {
 		compareYoVerb('Вернё', ['от', 'под', 'раз', 'с']);
 		compareYoVerb('Даё', ['воз', 'вы', 'об', 'от', 'с']); // !!! вы
 		compareYoVerb('Орё', ['об', 'раз']);
+		compareYoVerb('Пасё', ['за', 'на', 'при', 'про', 'с', 'у']);
 		compareYoVerb('Плывё', ['вс', 'об', 'от', 'под']);
 		compareYoVerb('Поё', ['вос', 'от', 'под', 'рас', 'с']);
 
@@ -248,6 +246,13 @@ describe('class Typograf', function() {
 		// MODE_NO_SUFFIXES
 		compareYoVerb('Шёл', verbPrefixes, []);
 
+		// MODE_ENDINGS_1
+		testYo('Зелёная,Зелёной,Зелёную,Зелёный,Зелёнка');
+		doNotChange('Зелен,Зеленеть,Зелени,Зелень');
+
+		// MODE_ENDINGS_1
+		testYo('Учёная,Учёной,Учёную,Учёным');
+		doNotChange('Заученный,Ученик,Ученье');
 	});
 
 	context('unsystematic cases', function() {
