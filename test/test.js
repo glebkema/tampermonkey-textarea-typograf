@@ -200,8 +200,8 @@ describe('class Typograf', function() {
 		doNotChange('Субъект,Объективные');
 
 		testYo('Придаёт');
-		doNotChange('Ожидает,Покидает');
-		doNotChange('Западает,Падает,Попадает');
+		doNotChange('Западает,Обладает,Падает,Попадает');  // ...адает
+		doNotChange('Ожидает,Покидает');  // ...идает
 
 		// TODO: doNotChange('Метка,Меткой,Пометкой');
 
