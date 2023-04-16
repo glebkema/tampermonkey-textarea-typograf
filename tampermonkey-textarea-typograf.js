@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.7.06
+// @version      0.7.07
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -289,7 +289,7 @@ class Typograf {
 		if (this.MODE_EXTRA_PREFIXES === mode) {
 			let lookBehind = '(?<![гжк-нпрф-я])'; // +аеиоу +бвдзст
 			if ('Даё' === replace) {
-				lookBehind = '(?<![гжик-нпрф-ъь-я]|па)'; // -и +ы  >>> +'Придаёт', -"Попадает"
+				lookBehind = '(?<![гжик-нпрф-ъь-я]|ла|па)'; // -и +ы  >>> +"Придаёт" -"Обладает" -"Попадает"
 			} else if ('Пасё' === replace) {
 				lookBehind = '(?<![б-зй-нпртф-я])';  // "напасёшься"
 			} else if ('Стаё' === replace) {
