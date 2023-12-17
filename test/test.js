@@ -11,6 +11,7 @@ let adjectiveEndings = [ 'ная', 'ного', 'ное', 'ной', 'ном', 'н
 
 let verbPrefixes = ['во', 'за', 'на', 'обо', 'ото', 'пере', 'по', 'подо', 'при', 'про', 'со', 'у'];
 let verbSuffixes = ['м', 'мся', 'т', 'те', 'тесь', 'тся', 'шь', 'шься'];
+let verbSuffixes2 = ['ем', 'ет', 'ется', 'ешь', 'л', 'ть'];  // Подчёркивать
 
 let wordPrefixes = [];
 let wordEndings  = ['а', 'у', 'е', 'ом', 'ы', 'и', 'ов', 'ам', 'ами', 'ах'];
@@ -131,8 +132,10 @@ describe('class Typograf', function() {
 		testYo('Взахлёб');
 		testYo('Журавлём,Кораблём');
 		testYo('Копьё,Копьём');
-		testYo('Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
 		doNotChange('Приемлемый');
+
+		testYo('Василёк,Мотылёк,Огонёк,Пенёк,Поперёк,Ручеёк');
+		doNotChange('Имярек');
 
 		doNotChange('Сосредоточено');
 
@@ -236,6 +239,9 @@ describe('class Typograf', function() {
 		doNotChange('Снег расстает в мае,Тает стаей город во мгле');
 		doNotChangeVerb('Вырастает,Зарастает,Отрастает,Подрастает,Расстает');
 
+		compareYoVerb('Чёркива', ['вы', 'за', 'от', 'под'], verbSuffixes2);
+		doNotChangeVerb('Очерк,Подчеркнуть,Почерк,Росчерк,Черкал,Черкассы,Черкать');
+
 		// MODE_NO_CAPITAL_LETTER
 		compareYoVerb('Йдё,Ймё');
 
@@ -250,9 +256,13 @@ describe('class Typograf', function() {
 		testYo('Зелёная,Зелёной,Зелёную,Зелёный,Зелёнка');
 		doNotChange('Зелен,Зеленеть,Зелени,Зелень');
 
-		// MODE_ENDINGS_1
+		// MODE_ENDINGS_2MODE_ENDINGS_3
 		testYo('Учёная,Учёной,Учёную,Учёным');
 		doNotChange('Заученный,Ученик,Ученье');
+
+		// MODE_ENDINGS_3
+		testYo('Включённая,Включённый');
+		doNotChange('Включен,Включена,Включение,Включены');
 	});
 
 	context('unsystematic cases', function() {
@@ -334,7 +344,7 @@ function compareYoVerb(core, prefixes = verbPrefixes, suffixes = verbSuffixes) {
 					let before = coreWithoutYo.toLowerCase() + ending;
 					let after = core.toLowerCase() + ending;
 
-					if ('Шлё' !== core && 'м' !== ending[0]) {
+					if ('Шлё' !== core && 'м' !== ending[0] && 'Чёркива' !== core) {
 						if ('Й' !== core[0]) {
 							// without prefix + starts with a capital letter
 							compareYo(coreWithoutYo + ending, core + ending);
@@ -350,7 +360,7 @@ function compareYoVerb(core, prefixes = verbPrefixes, suffixes = verbSuffixes) {
 					});
 				});
 			});
-			if (prefixes.length && 'Даё' !== core) {
+			if (prefixes.length && 'Даё' !== core && 'Чёркива' !== core) {
 				let unchanged = 'вы' + coreWithoutYo.toLowerCase();
 				it('do not change "' + unchanged + 'т"', function() {
 					suffixes.forEach(ending => {
