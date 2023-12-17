@@ -3,9 +3,9 @@
 // @namespace    https://github.com/glebkema/tampermonkey-textarea-typograf
 // @description  Replaces hyphens, quotation marks, uncanonic smiles and "yo" in some russian words.
 // @author       glebkema
-// @copyright    2020-2022, Gleb Kemarsky (https://github.com/glebkema)
+// @copyright    2020-2023, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.7.07
+// @version      0.7.08
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -34,6 +34,7 @@ class Typograf {
 	MODE_AS_IS = 'asIs';
 	MODE_ENDINGS_1 = 'endings1';
 	MODE_ENDINGS_2 = 'endings2';
+	MODE_ENDINGS_3 = 'endings3';
 	MODE_EXCEPTIONS = 'exceptions';
 	MODE_EXTRA_PREFIXES = 'extraPrefixes';
 	MODE_NO_CAPITAL_LETTER = 'noCapitalLetter';
@@ -117,6 +118,8 @@ class Typograf {
 		[this.MODE_ENDINGS_1]: 'Зелён',   // [аоуык]
 
 		[this.MODE_ENDINGS_2]: 'Учён',    // [аоуы]
+
+		[this.MODE_ENDINGS_3]: 'Включён', // [н]
 
 
 		[this.MODE_ANY_EXCEPT_I]: 'бретён,скажён,творён',
@@ -206,10 +209,13 @@ class Typograf {
 		text = this.replaceYo(text, 'Стег', 'Стёг', lookBehind, '(?!ал|ать|ну)');
 		text = this.replaceYo(text, 'Стегнут', 'Стёгнут', lookBehind, '(?!ь)');  // NB: расстёгнутый
 
+		text = this.replaceYo(text, 'черкива', 'чёркива', '(?<=[адты])', '(?=[елт])');
+
 		// verbs - fix the exceptions
-		text = this.replaceException(text, 'Раздольём');
-		text = this.replaceException(text, 'Расстаёт', '(?![а-дж-я])');
-		text = this.replaceException(text, 'Шлём');
+		lookBehind = '(?<![А-Яa-я])';
+		text = this.replaceException(text, 'Раздольём', lookBehind);
+		text = this.replaceException(text, 'Расстаёт',  lookBehind, '(?![а-дж-я])');
+		text = this.replaceException(text, 'Шлём',      lookBehind);
 
 		// words
 		for (let mode in this.words) {
@@ -252,11 +258,11 @@ class Typograf {
 	}
 
 	// restore the `e` instead of `yo`
-	replaceException(text, exception, lookAhead = '') {
+	replaceException(text, exception, lookBehind = '', lookAhead = '') {
 		const replace = this.removeAllYo(exception);
 		let regex = new RegExp(exception + lookAhead, 'g');
 		text = text.replace(regex, replace);
-		regex = new RegExp('(?<![А-Яa-я])' + exception.toLowerCase() + lookAhead, 'g');
+		regex = new RegExp(lookBehind + exception.toLowerCase() + lookAhead, 'g');
 		text = text.replace(regex, replace.toLowerCase());
 		return text;
 	}
@@ -383,6 +389,11 @@ class Typograf {
 			return this.replaceYo(text, find, replace,
 				'',
 				'(?=[аоуы])');
+		}
+		if (this.MODE_ENDINGS_3 === mode) {
+			return this.replaceYo(text, find, replace,
+				'',
+				'(?=н)');
 		}
 		// MODE_AS_IS
 		return this.replaceYo(text, find, replace,
