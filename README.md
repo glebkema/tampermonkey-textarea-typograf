@@ -32,11 +32,11 @@ Check the efficiency of the algorithm on the words with the letter "yo" collecte
 ```
 mocha test/test-yobase.js
 ```
-On 2023-12-17 the script corrected 10625 words out of 58138 = 18.28 %
+On 2024-03-09 the script corrected 10748 words out of 58138 = 18.49 %
 
 
 Check the efficiency of the algorithm on the ajectives only
 ```
 mocha test/test-adjectives.js
 ```
-On 2023-12-17 the script corrected 344 words out of 2395 = 14.36 %
+On 2024-03-09 the script corrected 351 words out of 2395 = 14.66 %
