@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2024, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.7.09
+// @version      0.7.10
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -47,7 +47,7 @@ class Typograf {
 		[this.MODE_EXTRA_PREFIXES]:    'Берё,Боднё,Вернё,Даё,Живё,Несё,Орё,Пасё,Плывё,Поё,Ревё,Смеё,Стаё',
 		[this.MODE_NO_CAPITAL_LETTER]: 'Йдё,Ймё',
 		[this.MODE_NO_PREFIXES]:       'Идё,Начнё,Обернё,Придаё,Придё,Улыбнё',
-		[this.MODE_NO_SUFFIXES]:       'берёг,Берёгся,Шёл',  // NB: the first starts with a small letter to prevent of changing the form without prefixes
+		[this.MODE_NO_SUFFIXES]:       'Берёгся,Шёл',
 		[this.MODE_STANDARD]:          'Бережё,Блеснё,Блюдё,Блюё,Бьё,Ведё,Везё,Врё,Вьё,Гнё,Дерё,Ждё,Жмё,Жрё,Льнё,Прё,Пьё,Ткнё,Чтё,Шлё,Шьё',
 	};
 
@@ -82,7 +82,8 @@ class Typograf {
 		+ 'бережённ,ворённ,мягчённ,ретённ,таённ,теплённ',
 
 		[this.MODE_ANY_BEGINNING]: 'атырёв,атырём,варём,'
-		+ 'арьё,арьём,ерьё,ерьём,ырьё,ырьём',
+		+ 'арьё,арьём,ерьё,ерьём,ырьё,ырьём,'
+		+ 'берёг',  // NB: except as is: "берег моря"
 
 		[this.MODE_ANY_BEGINNING_EXCEPT_O_AND_Y]:
 
