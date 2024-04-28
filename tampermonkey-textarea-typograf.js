@@ -5,7 +5,7 @@
 // @author       glebkema
 // @copyright    2020-2024, Gleb Kemarsky (https://github.com/glebkema)
 // @license      MIT
-// @version      0.7.11
+// @version      0.7.12
 // @match        http://*/*
 // @match        https://*/*
 // @grant        none
@@ -227,17 +227,18 @@ class Typograf {
 		text = this.replaceException(text, 'Расстаёт',  lookBehind, '(?![а-дж-я])');
 		text = this.replaceException(text, 'Шлём',      lookBehind);
 
+		// words with a certain preposition
+		// NB: before `words` for combinations like `Всё чётко`
+		text = this.improveYoWord(text, null, 'В моём,На моём,О моём');
+		text = this.improveYoWord(text, null, 'В нём,О нём,При нём');
+		text = this.improveYoWord(text, null, 'Всё верно,Всё напрасно,Всё очень просто,Всё понятно,Всё правильно,Всё просто,Всё путём,Всё равно,Всё так же,Всё то же,Всё точно,Всё чётко,Всё ясно');
+		text = this.improveYoWord(text, null, 'Всё, на чём/Всё, о чём/Всё, про что/Всё, с чем/Всё, что/Всё-таки', '/');
+		text = this.improveYoWord(text, null, 'Ни на чём/Ни о чём/Ни при чём', '/');
+
 		// words
 		for (let mode in this.words) {
 			text = this.improveYoWord(text, mode, this.words[mode]);
 		}
-
-		// words with a certain preposition
-		text = this.improveYoWord(text, null, 'В моём,На моём,О моём');
-		text = this.improveYoWord(text, null, 'В нём,О нём,При нём');
-		text = this.improveYoWord(text, null, 'Всё верно,Всё напрасно,Всё очень просто,Всё понятно,Всё правильно,Всё просто,Всё путём,Всё равно,Всё так же,Всё то же,Всё точно,Всё ясно');  // TODO: ??? "Всё чётко" >>> "Все чётко"
-		text = this.improveYoWord(text, null, 'Всё, на чём/Всё, о чём/Всё, про что/Всё, с чем/Всё, что/Всё-таки', '/');
-		text = this.improveYoWord(text, null, 'Ни на чём/Ни о чём/Ни при чём', '/');
 
 		return text;
 	}
